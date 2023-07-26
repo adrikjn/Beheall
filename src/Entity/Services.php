@@ -43,6 +43,10 @@ class Services
     #[ORM\JoinColumn(nullable: false)]
     private ?Invoice $invoice = null;
 
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Credit $credit = null;
+
     
 
     public function getId(): ?int
@@ -154,6 +158,18 @@ class Services
     public function setInvoice(?Invoice $invoice): static
     {
         $this->invoice = $invoice;
+
+        return $this;
+    }
+
+    public function getCredit(): ?Credit
+    {
+        return $this->credit;
+    }
+
+    public function setCredit(?Credit $credit): static
+    {
+        $this->credit = $credit;
 
         return $this;
     }

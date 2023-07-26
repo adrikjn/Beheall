@@ -244,12 +244,16 @@ class Company
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Invoice::class, orphanRemoval: true)]
     private Collection $invoices;
 
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Credit::class, orphanRemoval: true)]
+    private Collection $credits;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
         $this->customers = new ArrayCollection();
         $this->quotations = new ArrayCollection();
-        $this->invoices = new ArrayCollection(); 
+        $this->invoices = new ArrayCollection();
+        $this->credits = new ArrayCollection(); 
     }
 
     public function getId(): ?int
@@ -641,6 +645,36 @@ class Company
             // set the owning side to null (unless already changed)
             if ($invoice->getCompany() === $this) {
                 $invoice->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Credit>
+     */
+    public function getCredits(): Collection
+    {
+        return $this->credits;
+    }
+
+    public function addCredit(Credit $credit): static
+    {
+        if (!$this->credits->contains($credit)) {
+            $this->credits->add($credit);
+            $credit->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCredit(Credit $credit): static
+    {
+        if ($this->credits->removeElement($credit)) {
+            // set the owning side to null (unless already changed)
+            if ($credit->getCompany() === $this) {
+                $credit->setCompany(null);
             }
         }
 
