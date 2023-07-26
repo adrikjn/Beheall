@@ -238,10 +238,14 @@ class Company
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Customer::class, orphanRemoval: true)]
     private Collection $customers;
 
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Quotation::class, orphanRemoval: true)]
+    private Collection $quotations;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
-        $this->customers = new ArrayCollection(); 
+        $this->customers = new ArrayCollection();
+        $this->quotations = new ArrayCollection(); 
     }
 
     public function getId(): ?int
@@ -573,6 +577,36 @@ class Company
             // set the owning side to null (unless already changed)
             if ($customer->getCompany() === $this) {
                 $customer->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Quotation>
+     */
+    public function getQuotations(): Collection
+    {
+        return $this->quotations;
+    }
+
+    public function addQuotation(Quotation $quotation): static
+    {
+        if (!$this->quotations->contains($quotation)) {
+            $this->quotations->add($quotation);
+            $quotation->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuotation(Quotation $quotation): static
+    {
+        if ($this->quotations->removeElement($quotation)) {
+            // set the owning side to null (unless already changed)
+            if ($quotation->getCompany() === $this) {
+                $quotation->setCompany(null);
             }
         }
 
