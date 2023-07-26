@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
@@ -99,10 +101,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups("user:read")] 
     private ?\DateTimeInterface $createdAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Company::class, orphanRemoval: true)]
+    private Collection $companies;
+
 
     public function __construct()
     {
         $this->createdAt = new DateTime();
+        $this->companies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -219,6 +225,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Company>
+     */
+    public function getCompanies(): Collection
+    {
+        return $this->companies;
+    }
+
+    public function addCompany(Company $company): static
+    {
+        if (!$this->companies->contains($company)) {
+            $this->companies->add($company);
+            $company->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompany(Company $company): static
+    {
+        if ($this->companies->removeElement($company)) {
+            // set the owning side to null (unless already changed)
+            if ($company->getUser() === $this) {
+                $company->setUser(null);
+            }
+        }
 
         return $this;
     }
