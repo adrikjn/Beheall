@@ -2,27 +2,33 @@
 
 namespace App\Entity;
 
-use App\Repository\QuotationRepository;
+use App\Repository\InvoiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: QuotationRepository::class)]
-class Quotation
+#[ORM\Entity(repositoryClass: InvoiceRepository::class)]
+class Invoice
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'quotations')]
+    #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
 
-    #[ORM\ManyToOne(inversedBy: 'quotations')]
+    #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
+
+    #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: Quotation::class)]
+    private Collection $quotation;
+
+    #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: Services::class, orphanRemoval: true)]
+    private Collection $services;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -31,13 +37,13 @@ class Quotation
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $quoteNumber = null;
+    private ?string $billNumber = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $fromDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $deliveryDate = null;
+    private ?\DateTimeInterface $deeliveryDate = null;
 
     #[ORM\Column]
     private ?float $totalPrice = null;
@@ -46,13 +52,16 @@ class Quotation
     private ?float $vat = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $quoteValidityDuration = null;
+    private ?\DateTimeInterface $billValidityDuration = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $deposit = null;
+    private ?float $deeposit = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $depositDate = null;
+    private ?\DateTimeInterface $deepositDate = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
 
     #[ORM\Column(length: 255)]
     private ?string $paymentMethod = null;
@@ -63,20 +72,14 @@ class Quotation
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $paymentDateLimit = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'quotation', targetEntity: Services::class, orphanRemoval: true)]
-    private Collection $services;
-
-    #[ORM\ManyToOne(inversedBy: 'quotation')]
-    private ?Invoice $invoice = null;
+    
 
     public function __construct()
     {
+        $this->quotation = new ArrayCollection();
         $this->services = new ArrayCollection();
     }
 
@@ -109,6 +112,66 @@ class Quotation
         return $this;
     }
 
+    /**
+     * @return Collection<int, Quotation>
+     */
+    public function getQuotation(): Collection
+    {
+        return $this->quotation;
+    }
+
+    public function addQuotation(Quotation $quotation): static
+    {
+        if (!$this->quotation->contains($quotation)) {
+            $this->quotation->add($quotation);
+            $quotation->setInvoice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuotation(Quotation $quotation): static
+    {
+        if ($this->quotation->removeElement($quotation)) {
+            // set the owning side to null (unless already changed)
+            if ($quotation->getInvoice() === $this) {
+                $quotation->setInvoice(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Services>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Services $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->setInvoice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Services $service): static
+    {
+        if ($this->services->removeElement($service)) {
+            // set the owning side to null (unless already changed)
+            if ($service->getInvoice() === $this) {
+                $service->setInvoice(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getTitle(): ?string
     {
         return $this->title;
@@ -133,14 +196,14 @@ class Quotation
         return $this;
     }
 
-    public function getQuoteNumber(): ?string
+    public function getBillNumber(): ?string
     {
-        return $this->quoteNumber;
+        return $this->billNumber;
     }
 
-    public function setQuoteNumber(string $quoteNumber): static
+    public function setBillNumber(string $billNumber): static
     {
-        $this->quoteNumber = $quoteNumber;
+        $this->billNumber = $billNumber;
 
         return $this;
     }
@@ -157,14 +220,14 @@ class Quotation
         return $this;
     }
 
-    public function getDeliveryDate(): ?\DateTimeInterface
+    public function getDeeliveryDate(): ?\DateTimeInterface
     {
-        return $this->deliveryDate;
+        return $this->deeliveryDate;
     }
 
-    public function setDeliveryDate(\DateTimeInterface $deliveryDate): static
+    public function setDeeliveryDate(\DateTimeInterface $deeliveryDate): static
     {
-        $this->deliveryDate = $deliveryDate;
+        $this->deeliveryDate = $deeliveryDate;
 
         return $this;
     }
@@ -193,38 +256,50 @@ class Quotation
         return $this;
     }
 
-    public function getQuoteValidityDuration(): ?\DateTimeInterface
+    public function getBillValidityDuration(): ?\DateTimeInterface
     {
-        return $this->quoteValidityDuration;
+        return $this->billValidityDuration;
     }
 
-    public function setQuoteValidityDuration(\DateTimeInterface $quoteValidityDuration): static
+    public function setBillValidityDuration(\DateTimeInterface $billValidityDuration): static
     {
-        $this->quoteValidityDuration = $quoteValidityDuration;
+        $this->billValidityDuration = $billValidityDuration;
 
         return $this;
     }
 
-    public function getDeposit(): ?float
+    public function getDeeposit(): ?float
     {
-        return $this->deposit;
+        return $this->deeposit;
     }
 
-    public function setDeposit(?float $deposit): static
+    public function setDeeposit(?float $deeposit): static
     {
-        $this->deposit = $deposit;
+        $this->deeposit = $deeposit;
 
         return $this;
     }
 
-    public function getDepositDate(): ?\DateTimeInterface
+    public function getDeepositDate(): ?\DateTimeInterface
     {
-        return $this->depositDate;
+        return $this->deepositDate;
     }
 
-    public function setDepositDate(?\DateTimeInterface $depositDate): static
+    public function setDeepositDate(?\DateTimeInterface $deepositDate): static
     {
-        $this->depositDate = $depositDate;
+        $this->deepositDate = $deepositDate;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
@@ -265,18 +340,6 @@ class Quotation
         return $this;
     }
 
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -285,48 +348,6 @@ class Quotation
     public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Services>
-     */
-    public function getServices(): Collection
-    {
-        return $this->services;
-    }
-
-    public function addService(Services $service): static
-    {
-        if (!$this->services->contains($service)) {
-            $this->services->add($service);
-            $service->setQuotation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeService(Services $service): static
-    {
-        if ($this->services->removeElement($service)) {
-            // set the owning side to null (unless already changed)
-            if ($service->getQuotation() === $this) {
-                $service->setQuotation(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getInvoice(): ?Invoice
-    {
-        return $this->invoice;
-    }
-
-    public function setInvoice(?Invoice $invoice): static
-    {
-        $this->invoice = $invoice;
 
         return $this;
     }

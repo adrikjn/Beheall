@@ -39,6 +39,12 @@ class Services
     #[ORM\JoinColumn(nullable: false)]
     private ?Quotation $quotation = null;
 
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Invoice $invoice = null;
+
+    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +142,18 @@ class Services
     public function setQuotation(?Quotation $quotation): static
     {
         $this->quotation = $quotation;
+
+        return $this;
+    }
+
+    public function getInvoice(): ?Invoice
+    {
+        return $this->invoice;
+    }
+
+    public function setInvoice(?Invoice $invoice): static
+    {
+        $this->invoice = $invoice;
 
         return $this;
     }
