@@ -1,0 +1,24 @@
+/* $user = new User();
+        $user->setEmail('admin@gmail.com');
+        $user->setFirstName('Admin');
+        $user->setLastName('Admin');
+        $user->setPhoneNumber('06 06 06 06 06');
+        $user->setRoles([
+            'ROLE_ADMIN',
+            'ROLE_USER'
+        ]);
+        $password = $this->hasher->hashPassword($user, 'Admin123@');
+        $user->setPassword($password);
+        $manager->persist($user);
+        $manager->flush();
+
+        for ($i = 1; $i <= 50; $i++) {
+            $service = new Services();
+            $service->setTitle("Service $i");
+            $service->setDescription("Description du service $i");
+            $service->setQuantity(rand(1, 100));
+            $service->setUnitCost(rand(1, 1000));
+            $service->setTotalPrice($service->getQuantity() * $service->getUnitCost());
+            $service->setCreatedAt(new \DateTime());
+        }        
+        */

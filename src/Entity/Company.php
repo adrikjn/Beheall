@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => ['company:read']],
     denormalizationContext: ['groups' => ['company:create'
-    ]],
+    ]]
 )]
 class Company
 {

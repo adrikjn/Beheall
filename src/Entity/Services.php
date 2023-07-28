@@ -25,9 +25,6 @@ class Services
     #[ORM\Column]
     private ?int $quantity = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $quantityType = null;
-
     #[ORM\Column]
     private ?float $unitCost = null;
 
@@ -88,18 +85,6 @@ class Services
     public function setQuantity(int $quantity): static
     {
         $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    public function getQuantityType(): ?string
-    {
-        return $this->quantityType;
-    }
-
-    public function setQuantityType(string $quantityType): static
-    {
-        $this->quantityType = $quantityType;
 
         return $this;
     }
