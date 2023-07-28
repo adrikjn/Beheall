@@ -16,9 +16,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['user:read']],
-    denormalizationContext: ['groups' => ['user:create', 'user:update']],
+    denormalizationContext: ['groups' => ['user:create']]
 )]
-#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -37,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         minMessage: "L'email doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'email ne peut pas dépasser {{ limit }} caractères."
     )]
-    #[Groups(['user:read', 'user:create', "user:update"])]
+    #[Groups(['user:read', 'user:create'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -48,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Groups("user:create", "user:update")]
+    #[Groups("user:create")]
     #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide.")]
     #[Assert\Length(
         min: 6,
@@ -94,7 +93,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         pattern:"/^\+?[0-9]+$/",
         message:"Le numéro de téléphone doit contenir seulement des chiffres et un signe '+'."
     )]
-    #[Groups(["user:read", "user:create", "user:update"])]
+    #[Groups(["user:read", "user:create"])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

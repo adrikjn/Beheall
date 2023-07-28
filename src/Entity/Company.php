@@ -16,7 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['company:read']],
-    denormalizationContext: ['groups' => ['company:create', 'company:update']],
+    denormalizationContext: ['groups' => ['company:create'
+    ]],
 )]
 class Company
 {
@@ -27,7 +28,7 @@ class Company
 
     #[ORM\ManyToOne(inversedBy: 'companies')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['company:read'])]
+    #[Groups(['company:read', 'user:read'])] 
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]
@@ -38,15 +39,15 @@ class Company
         minMessage: "Le nom doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
     )]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     private ?string $logo = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\NotBlank(message: "L'adresse ne peut pas être vide.")]
     #[Assert\Length(
         min: 5,
@@ -65,7 +66,7 @@ class Company
         minMessage: "L'email doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'email ne peut pas dépasser {{ limit }} caractères."
     )]
-    #[Groups(['company:read', 'company:create', "company:update"])]
+    #[Groups(['company:read', 'company:create'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -78,11 +79,11 @@ class Company
         pattern:"/^\+?[0-9]+$/",
         message:"Le numéro de téléphone doit contenir seulement des chiffres et un signe '+'."
     )]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\NotBlank(message: "La ville ne peut pas être vide.")]
     #[Assert\Length(
         min: 3,
@@ -93,7 +94,7 @@ class Company
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\NotBlank(message: "Le code postal ne peut pas être vide.")]
     #[Assert\Regex(
         pattern: "/^\d{5}$/",
@@ -102,7 +103,7 @@ class Company
     private ?string $postalCode = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\NotBlank(message: "Le pays ne peut pas être vide.")]
     #[Assert\Length(
         min: 3,
@@ -113,12 +114,12 @@ class Company
     private ?string $country = null;
 
     #[ORM\Column]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\NotBlank(message: "Le champ ne peut pas être vide.")]
     private ?bool $billingIsDifferent = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\Length(
         max: 70,
         maxMessage: "L'adresse de facturation ne peut pas dépasser {{ limit }} caractères."
@@ -126,7 +127,7 @@ class Company
     private ?string $billingAddress = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\Length(
         max: 30,
         maxMessage: "La ville de facturation ne peut pas dépasser {{ limit }} caractères."
@@ -134,7 +135,7 @@ class Company
     private ?string $billingCity = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\Regex(
         pattern: "/^\d{5}$/",
         message: "Le code postal doit contenir exactement 5 chiffres."
@@ -142,7 +143,7 @@ class Company
     private ?string $billingPostalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\Length(
         max:40,
         maxMessage: "Le pays ne peut pas dépasser {{ limit }} caractères."
@@ -150,7 +151,7 @@ class Company
     private ?string $billingCountry = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\NotBlank(message: "Le numéro SIREN/SIRET ne peut pas être vide.")]
     #[Assert\Regex(
         pattern: "/^[0-9]{9}|[0-9]{14}$/",
@@ -159,7 +160,7 @@ class Company
     private ?string $sirenSiret = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\NotBlank(message: "Le numéro SIREN/SIRET ne peut pas être vide.")]
     #[Assert\Length(
         min: 5,
@@ -170,7 +171,7 @@ class Company
     private ?string $legalForm = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\Length(
         exactMessage: "Le numéro RM doit contenir exactement 10 chiffres.",
         min: 10,
@@ -179,7 +180,7 @@ class Company
     private ?string $rmNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     #[Assert\Length(
         exactly: 9,
         exactMessage: "Le numéro RCS/RC doit contenir exactement {{ limit }} chiffres."
@@ -191,7 +192,7 @@ class Company
         pattern: '/^[0-9]+$/',
         message: 'Le capital social ne peut contenir que des chiffres.'
     )]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     private ?string $shareCapital = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -199,7 +200,7 @@ class Company
         max: 30,
         maxMessage: "La ville de facturation ne peut pas dépasser {{ limit }} caractères."
     )]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     private ?string $cityRegistration = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -207,12 +208,12 @@ class Company
         pattern: '/^FR[0-9A-Z]{2}[0-9]{9}$/i',
         message: 'Le numéro de TVA intracommunautaire doit être au format FR12345678901.'
     )]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     private ?string $vatId = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Url(message: "L'adresse du site web n'est pas une URL valide.")]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     private ?string $website = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -220,7 +221,7 @@ class Company
         max: 500,
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
     )]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     private ?string $descriptionWork = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -228,7 +229,7 @@ class Company
         max: 5000,
         maxMessage: "Les conditions générales de vente ne peuvent pas dépasser {{ limit }} caractères."
     )]
-    #[Groups(["company:read", "company:create", "company:update"])]
+    #[Groups(["company:read", "company:create"])]
     private ?string $gcs = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

@@ -2,8 +2,8 @@ api_platform:
   title: 'Beheall API'
   eager_loading:
     max_joins: 100
-  # formats:
-  #  json: ['application/json']
+  formats:
+    json: ['application/json']
   mapping:
     paths: ['%kernel.project_dir%/src/Entity']
   patch_formats:
