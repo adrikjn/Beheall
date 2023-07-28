@@ -27,9 +27,7 @@ class AppFixtures extends Fixture
         ]);
         $password = $this->hasher->hashPassword($user, 'Admin123@');
         $user->setPassword($password);
-
         $manager->persist($user);
-
         $manager->flush();
     }
 }
