@@ -29,7 +29,7 @@ class AppFixtures extends Fixture
             $user->setLastName("Lastname $i");
             $user->setFirstName("Firstname $i");
             $user->setPhoneNumber("123456789$i");
-
+            $user->setCreatedAt(new \DateTime());
             $manager->persist($user);
         }
         $manager->flush();    
