@@ -35,7 +35,7 @@ class AppFixtures extends Fixture
         $manager->flush();    
         
         $users = $manager->getRepository(User::class)->findAll();
-
+        $legalForms = ["EI", "EURL", "SARL", "SNC", "SAS", "SA"];
         for ($i = 1; $i <= 70; $i++) {
             $company = new Company();
             $company->setUser($users[array_rand($users)]);
@@ -57,20 +57,30 @@ class AppFixtures extends Fixture
             $company->setSirenSiret("123456789");
             $randomField = rand(1, 3);
             if ($randomField === 1) {
-                $company->setLegalForm("Forme juridique $i");
+                $randomLegalForm = $legalForms[array_rand($legalForms)];
+                $company->setLegalForm("$randomLegalForm");
             } elseif ($randomField === 2) {
                 $company->setRmNumber("RM$i");
             } else {
                 $company->setRcsNumber("RCS$i");
             }
-            $company->setShareCapital((string)rand(0, 10000));
-            $company->setCityRegistration("Ville d'enregistrement $i");
+            if ($randomField === 1) {
+                $company->setShareCapital((string)rand(0, 10000));
+            }
+            if($randomField === 1){
+                $company->setCityRegistration("Ville d'enregistrement $i");
+            }
             $company->setVatId("FR12345678901");
-            $company->setWebsite("https://www.example$i.com");
-            $company->setDescriptionWork("Description des travaux $i");
-            $company->setGcs("Conditions générales de vente $i");
+            if ($randomField === 1) {
+                $company->setWebsite("https://www.example$i.com");
+            }
+            if ($randomField === 1) {
+                $company->setDescriptionWork("Description des travaux $i");
+            }
+            if ($randomField === 1) {
+                $company->setGcs("Conditions générales de vente $i");
+            }
             $company->setCreatedAt(new \DateTime());
-
             $manager->persist($company);
         }
         $manager->flush();
@@ -85,6 +95,7 @@ class AppFixtures extends Fixture
 
             // Remplir email, activity, addressLine2, website, billingAddress et notes une fois sur deux
             if ($i % 2 === 0) {
+                $customer->setCompanyName("Company $i");
                 $customer->setEmail("contact$i@example.com");
                 $customer->setActivity("Activité $i");
                 $customer->setAddressLine2("Adresse ligne 2 $i");
