@@ -59,8 +59,6 @@ class Invoice
     #[ORM\Column(nullable: true)]
     private ?float $depositReduce = null;
 
-
-
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 

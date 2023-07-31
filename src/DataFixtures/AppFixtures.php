@@ -120,7 +120,6 @@ class AppFixtures extends Fixture
         $customers = $manager->getRepository(Customer::class)->findAll();
         $statusOptions = ["brouillon", "en attente", "accepté"];
         $validityDaysOptions = [15, 30, 45, 60];
-        $randomValidityDays = $validityDaysOptions[array_rand($validityDaysOptions)];
         $paymentMethods = [
             'Carte bancaire',
             'Virement bancaire',
@@ -131,25 +130,21 @@ class AppFixtures extends Fixture
             'Chèque-cadeau',
             'Financement ou crédit',
         ];
-        
+
         foreach ($companies as $company) {
             $quotation = new Quotation();
-            $quotation->setCompany($companies[array_rand($companies)]);
+            $quotation->setCompany($company); // Utiliser directement $company
             $quotation->setCustomer($customers[array_rand($customers)]);
-            /*[ORM\ManyToOne(inversedBy: 'quotation')]
-            private ?Invoice $invoice = null;*/
-            if ($i % 2 === 0) {
-                $quotation->setDescription("Description du devis $i");
-                $quotation->setFromDate(new \DateTime());
-                $quotation->setDeposit(rand(50, 200));
-                $quotation->setDepositDate(new \DateTime());
-            }
-            $quotation->setTitle("Devis $i");
-            $quotation->setQuoteNumber("Q-00$i");
+            $quotation->setTitle("Devis " . $quotation->getId());
+            $quotation->setDescription("Description du devis " . $quotation->getId());
+            $quotation->setQuoteNumber("Q-00" . $quotation->getId());
+            $quotation->setFromDate(new \DateTime());
             $quotation->setDeliveryDate(new \DateTime());
             $quotation->setTotalPrice(rand(1, 1000000));
             $quotation->setVat(20);
-            
+            $quotation->setDeposit(rand(50, 200));
+            $quotation->setDepositDate(new \DateTime());
+            $randomValidityDays = $validityDaysOptions[array_rand($validityDaysOptions)];
             $validityDuration = new \DateTime();
             $validityDuration->add(new \DateInterval("P{$randomValidityDays}D"));
             $quotation->setQuoteValidityDuration($validityDuration);
@@ -165,13 +160,42 @@ class AppFixtures extends Fixture
             $daysRemaining = $currentDate->diff($paymentDateLimit)->days;
             $quotation->setPaymentDays($daysRemaining);
 
-            
             $randomStatusIndex = array_rand($statusOptions);
             $quotation->setStatus($statusOptions[$randomStatusIndex]);
             $quotation->setCreatedAt(new \DateTime());
 
             $manager->persist($quotation);
+
+            // Créer les services pour chaque devis
+            $numServices = rand(1, 5); // Nombre aléatoire de services par devis (entre 1 et 5)
+            $totalPrice = $quotation->getTotalPrice();
+
+            for ($i = 1; $i <= $numServices; $i++) {
+                $service = new Services();
+                $service->setTitle("Service $i");
+                $service->setDescription("Description du service $i");
+
+                // Calculer la quantité aléatoire de manière à ce que le prix total du service ne dépasse pas le totalPrice du devis
+                $maxQuantity = ceil($totalPrice / ($numServices - $i + 1)); // On arrondit à l'entier supérieur
+                $quantity = rand(1, $maxQuantity);
+                $service->setQuantity($quantity);
+
+                // Recalculer le coût unitaire en fonction de la quantité
+                $unitCost = $totalPrice > 0 ? ($totalPrice - $quotation->getTotalServicesPrice()) / $quantity : 0;
+                $service->setUnitCost($unitCost);
+
+                // Calculer le prix total du service
+                $totalServicePrice = $quantity * $unitCost;
+                $service->setTotalPrice($totalServicePrice);
+
+                $service->setCreatedAt(new \DateTime());
+                $service->setQuotation($quotation);
+
+                $manager->persist($service);
+            }
         }
+
         $manager->flush();
+
     }
 }

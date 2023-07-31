@@ -82,6 +82,17 @@ class Quotation
         $this->services = new ArrayCollection();
     }
 
+    public function getTotalServicesPrice(): float
+    {
+        $total = 0.0;
+
+        foreach ($this->services as $service) {
+            $total += $service->getTotalPrice();
+        }
+
+        return $total;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
