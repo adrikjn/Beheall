@@ -210,36 +210,22 @@ class AppFixtures extends Fixture
                 $credit->setCreatedAt(new \DateTime());
 
                 $manager->persist($credit);
+
+                for ($j = 1; $j <= 3; $j++) {
+                    $service = new Services();
+                    $service->setTitle("Service $j commun pour " . $quotation->getTitle() . ", " . $invoice->getTitle() . " et " . $credit->getTitle());
+                    $service->setDescription("Description du service $j commun pour " . $quotation->getTitle() . ", " . $invoice->getTitle() . " et " . $credit->getTitle());
+                    $service->setQuantity(rand(1, 10));
+                    $service->setUnitCost(rand(50, 200));
+                    $service->setTotalPrice($service->getQuantity() * $service->getUnitCost());
+                    $service->setCreatedAt(new \DateTime());
+                    $service->setQuotation($quotation);
+                    $service->setInvoice($invoice);
+                    $service->setCredit($credit);
+                    $manager->persist($service);
+                }
             }
         }   
         $manager->flush();        
-
-        $quotations = $manager->getRepository(Quotation::class)->findAll();
-        $invoices = $manager->getRepository(Invoice::class)->findAll();
-        $credits = $manager->getRepository(Credit::class)->findAll();
-        for ($i = 1; $i <= 3; $i++) {
-            $service = new Services();
-            $service->setTitle("Service $i commun");
-            $service->setDescription("Description du service $i commun");
-            $service->setQuantity(rand(1, 10));
-            $service->setUnitCost(rand(50, 200));
-            $service->setTotalPrice($service->getQuantity() * $service->getUnitCost());
-            $service->setCreatedAt(new \DateTime());
-            $manager->persist($service);
-        
-            foreach ($quotations as $quotation) {
-                $service->setQuotation($quotation);
-            }
-        
-            foreach ($invoices as $invoice) {
-                $service->setInvoice($invoice);
-            }
-        
-            foreach ($credits as $credit) {
-                $service->setCredit($credit);
-            }
-        }
-        
-        $manager->flush();
     }
 }
