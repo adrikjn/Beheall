@@ -4,8 +4,8 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use App\Entity\Company;
+use App\Entity\Invoice;
 use App\Entity\Customer;
-use App\Entity\Services;
 use App\Entity\Quotation;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -130,13 +130,12 @@ class AppFixtures extends Fixture
             'Chèque-cadeau',
             'Financement ou crédit',
         ];
-
         foreach ($companies as $company) {
             $quotation = new Quotation();
-            $quotation->setCompany($company); // Utiliser directement $company
+            $quotation->setCompany($company); 
             $quotation->setCustomer($customers[array_rand($customers)]);
-            $quotation->setTitle("Devis " . $quotation->getId());
-            $quotation->setDescription("Description du devis " . $quotation->getId());
+            $quotation->setTitle("Devis");
+            $quotation->setDescription("Description du devis ");
             $quotation->setQuoteNumber("Q-00" . $quotation->getId());
             $quotation->setFromDate(new \DateTime());
             $quotation->setDeliveryDate(new \DateTime());
@@ -144,6 +143,7 @@ class AppFixtures extends Fixture
             $quotation->setVat(20);
             $quotation->setDeposit(rand(50, 200));
             $quotation->setDepositDate(new \DateTime());
+
             $randomValidityDays = $validityDaysOptions[array_rand($validityDaysOptions)];
             $validityDuration = new \DateTime();
             $validityDuration->add(new \DateInterval("P{$randomValidityDays}D"));
@@ -152,50 +152,50 @@ class AppFixtures extends Fixture
             $randomPaymentMethod = $paymentMethods[array_rand($paymentMethods)];
             $quotation->setPaymentMethod($randomPaymentMethod);
 
-            $quoteValidityDuration = (new \DateTime())->modify('+30 days');
-            $quotation->setQuoteValidityDuration($quoteValidityDuration);
-            $paymentDateLimit = $quoteValidityDuration->modify('-10 days');
-            $quotation->setPaymentDateLimit($paymentDateLimit);
-            $currentDate = new \DateTime();
-            $daysRemaining = $currentDate->diff($paymentDateLimit)->days;
-            $quotation->setPaymentDays($daysRemaining);
+            $quotation->setQuoteValidityDuration(new \DateTime());
+            $quotation->setPaymentDateLimit(new \DateTime());
 
+            $quotation->setPaymentDays("30 jours");
             $randomStatusIndex = array_rand($statusOptions);
             $quotation->setStatus($statusOptions[$randomStatusIndex]);
             $quotation->setCreatedAt(new \DateTime());
 
             $manager->persist($quotation);
+        }
+    $manager->flush();
 
-            // Créer les services pour chaque devis
-            $numServices = rand(1, 5); // Nombre aléatoire de services par devis (entre 1 et 5)
-            $totalPrice = $quotation->getTotalPrice();
+    foreach ($companies as $company) {
+        
+        for ($i = 1; $i <= 5; $i++) {
+            $invoice = new Invoice();
+            $invoice->setCompany($company);
+            $invoice->setCustomer($customers[array_rand($customers)]);
+            $invoice->setTitle("Facture $i");
+            $invoice->setDescription("Description de la facture $i");
+            $invoice->setBillNumber("BILL-00$i");
+            $invoice->setFromDate(new \DateTime());
+            $invoice->setDeliveryDate(new \DateTime());
+            $invoice->setTotalPrice(rand(1, 1000000));
+            $invoice->setVat(20);
 
-            for ($i = 1; $i <= $numServices; $i++) {
-                $service = new Services();
-                $service->setTitle("Service $i");
-                $service->setDescription("Description du service $i");
+            $billValidityDuration = new \DateTime();
+            $billValidityDuration->add(new \DateInterval('P30D'));
+            $invoice->setBillValidityDuration($billValidityDuration);
 
-                // Calculer la quantité aléatoire de manière à ce que le prix total du service ne dépasse pas le totalPrice du devis
-                $maxQuantity = ceil($totalPrice / ($numServices - $i + 1)); // On arrondit à l'entier supérieur
-                $quantity = rand(1, $maxQuantity);
-                $service->setQuantity($quantity);
+            $invoice->setDepositReeduce(rand(50, 200));
+            $invoice->setStatus('paid');
+            $invoice->setPaymentMethod('Carte bancaire');
+            $invoice->setPaymentDays("30 jours");
+            $paymentDateLimit = new \DateTime();
+            $paymentDateLimit->add(new \DateInterval('P15D'));
+            
+            $invoice->setPaymentDateLimit($paymentDateLimit);
 
-                // Recalculer le coût unitaire en fonction de la quantité
-                $unitCost = $totalPrice > 0 ? ($totalPrice - $quotation->getTotalServicesPrice()) / $quantity : 0;
-                $service->setUnitCost($unitCost);
+            $invoice->setCreatedAt(new \DateTime());
 
-                // Calculer le prix total du service
-                $totalServicePrice = $quantity * $unitCost;
-                $service->setTotalPrice($totalServicePrice);
-
-                $service->setCreatedAt(new \DateTime());
-                $service->setQuotation($quotation);
-
-                $manager->persist($service);
+            $manager->persist($invoice);
             }
         }
-
         $manager->flush();
-
     }
 }

@@ -74,23 +74,14 @@ class Quotation
     #[ORM\OneToMany(mappedBy: 'quotation', targetEntity: Services::class, orphanRemoval: true)]
     private Collection $services;
 
-    #[ORM\ManyToOne(inversedBy: 'quotation')]
+    #[ORM\OneToOne(mappedBy: 'quotation', cascade: ['persist', 'remove'])]
     private ?Invoice $invoice = null;
+
+
 
     public function __construct()
     {
         $this->services = new ArrayCollection();
-    }
-
-    public function getTotalServicesPrice(): float
-    {
-        $total = 0.0;
-
-        foreach ($this->services as $service) {
-            $total += $service->getTotalPrice();
-        }
-
-        return $total;
     }
 
     public function getId(): ?int
@@ -339,6 +330,16 @@ class Quotation
 
     public function setInvoice(?Invoice $invoice): static
     {
+        // unset the owning side of the relation if necessary
+        if ($invoice === null && $this->invoice !== null) {
+            $this->invoice->setQuotation(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($invoice !== null && $invoice->getQuotation() !== $this) {
+            $invoice->setQuotation($this);
+        }
+
         $this->invoice = $invoice;
 
         return $this;

@@ -26,9 +26,6 @@ class Invoice
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
 
-    #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: Quotation::class)]
-    private Collection $quotation;
-
     #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: Services::class, orphanRemoval: true)]
     private Collection $services;
 
@@ -45,7 +42,7 @@ class Invoice
     private ?\DateTimeInterface $fromDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $deeliveryDate = null;
+    private ?\DateTimeInterface $deliveryDate = null;
 
     #[ORM\Column]
     private ?float $totalPrice = null;
@@ -77,11 +74,13 @@ class Invoice
     #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: Credit::class, orphanRemoval: true)]
     private Collection $credits;
 
+    #[ORM\OneToOne(inversedBy: 'invoice', cascade: ['persist', 'remove'])]
+    private ?Quotation $quotation = null;
+
     
 
     public function __construct()
     {
-        $this->quotation = new ArrayCollection();
         $this->services = new ArrayCollection();
         $this->credits = new ArrayCollection();
     }
@@ -111,36 +110,6 @@ class Invoice
     public function setCustomer(?Customer $customer): static
     {
         $this->customer = $customer;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Quotation>
-     */
-    public function getQuotation(): Collection
-    {
-        return $this->quotation;
-    }
-
-    public function addQuotation(Quotation $quotation): static
-    {
-        if (!$this->quotation->contains($quotation)) {
-            $this->quotation->add($quotation);
-            $quotation->setInvoice($this);
-        }
-
-        return $this;
-    }
-
-    public function removeQuotation(Quotation $quotation): static
-    {
-        if ($this->quotation->removeElement($quotation)) {
-            // set the owning side to null (unless already changed)
-            if ($quotation->getInvoice() === $this) {
-                $quotation->setInvoice(null);
-            }
-        }
 
         return $this;
     }
@@ -223,14 +192,14 @@ class Invoice
         return $this;
     }
 
-    public function getDeeliveryDate(): ?\DateTimeInterface
+    public function getDeliveryDate(): ?\DateTimeInterface
     {
-        return $this->deeliveryDate;
+        return $this->deliveryDate;
     }
 
-    public function setDeeliveryDate(\DateTimeInterface $deeliveryDate): static
+    public function setDeliveryDate(\DateTimeInterface $deliveryDate): static
     {
-        $this->deeliveryDate = $deeliveryDate;
+        $this->deliveryDate = $deliveryDate;
 
         return $this;
     }
@@ -369,6 +338,18 @@ class Invoice
                 $credit->setInvoice(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getQuotation(): ?Quotation
+    {
+        return $this->quotation;
+    }
+
+    public function setQuotation(?Quotation $quotation): static
+    {
+        $this->quotation = $quotation;
 
         return $this;
     }
