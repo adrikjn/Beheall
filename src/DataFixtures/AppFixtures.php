@@ -133,10 +133,12 @@ class AppFixtures extends Fixture
             'Financement ou crédit',
         ];     
         foreach ($companies as $company) {
+            $customersInCompany = $manager->getRepository(Customer::class)->findBy(['company' => $company]);
+            if(!empty($customersInCompany)) {
             for ($i = 1; $i <= 5; $i++) {
                 $quotation = new Quotation();
                 $quotation->setCompany($company); 
-                $customer = $customers[array_rand($customers)];
+                $customer = $customersInCompany[array_rand($customersInCompany)];
                 $quotation->setCustomer($customer);
                 $quotation->setTitle("Devis");
                 $quotation->setDescription("Description du devis ");
@@ -223,6 +225,7 @@ class AppFixtures extends Fixture
                     $service->setInvoice($invoice);
                     $service->setCredit($credit);
                     $manager->persist($service);
+                    }
                 }
             }
         }   
