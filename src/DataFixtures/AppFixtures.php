@@ -3,9 +3,11 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use App\Entity\Credit;
 use App\Entity\Company;
 use App\Entity\Invoice;
 use App\Entity\Customer;
+use App\Entity\Services;
 use App\Entity\Quotation;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -129,8 +131,7 @@ class AppFixtures extends Fixture
             'Espèces',
             'Chèque-cadeau',
             'Financement ou crédit',
-        ];
-        
+        ];     
         foreach ($companies as $company) {
             for ($i = 1; $i <= 5; $i++) {
                 $quotation = new Quotation();
@@ -165,7 +166,7 @@ class AppFixtures extends Fixture
         
                 $manager->persist($quotation);
         
-                // Création de la facture associée au devis
+
                 $invoice = new Invoice();
                 $invoice->setCompany($company);
                 $invoice->setCustomer($customer);
@@ -182,8 +183,8 @@ class AppFixtures extends Fixture
                 $invoice->setBillValidityDuration($billValidityDuration);
         
                 $invoice->setDepositReduce(rand(50, 200));
-                $invoice->setStatus('paid');
-                $invoice->setPaymentMethod('Carte bancaire');
+                $invoice->setStatus($statusOptions[$randomStatusIndex]);
+                $invoice->setPaymentMethod($randomPaymentMethod);
                 $invoice->setPaymentDays("30 jours");
                 $paymentDateLimit = new \DateTime();
                 $paymentDateLimit->add(new \DateInterval('P15D'));
@@ -193,8 +194,52 @@ class AppFixtures extends Fixture
                 $invoice->setQuotation($quotation);
         
                 $manager->persist($invoice);
+
+
+                $credit = new Credit();
+                $credit->setCompany($company);
+                $credit->setCustomer($customer);
+                $credit->setInvoice($invoice);
+                $credit->setTitle("Crédit $i");
+                $credit->setCreditNumber("CR-" . uniqid());
+                $credit->setRefundReason("Raison de remboursement pour le crédit $i");
+                $credit->setRefundedPrice(rand(1, 1000));
+                $credit->setCreditValidityDuration(new \DateTime('+1 month'));
+                $credit->setStatus($statusOptions[$randomStatusIndex]);
+                $credit->setRefundMethod($randomPaymentMethod);
+                $credit->setCreatedAt(new \DateTime());
+
+                $manager->persist($credit);
             }
         }   
         $manager->flush();        
+
+        $quotations = $manager->getRepository(Quotation::class)->findAll();
+        $invoices = $manager->getRepository(Invoice::class)->findAll();
+        $credits = $manager->getRepository(Credit::class)->findAll();
+        for ($i = 1; $i <= 3; $i++) {
+            $service = new Services();
+            $service->setTitle("Service $i commun");
+            $service->setDescription("Description du service $i commun");
+            $service->setQuantity(rand(1, 10));
+            $service->setUnitCost(rand(50, 200));
+            $service->setTotalPrice($service->getQuantity() * $service->getUnitCost());
+            $service->setCreatedAt(new \DateTime());
+            $manager->persist($service);
+        
+            foreach ($quotations as $quotation) {
+                $service->setQuotation($quotation);
+            }
+        
+            foreach ($invoices as $invoice) {
+                $service->setInvoice($invoice);
+            }
+        
+            foreach ($credits as $credit) {
+                $service->setCredit($credit);
+            }
+        }
+        
+        $manager->flush();
     }
 }
