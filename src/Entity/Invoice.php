@@ -245,7 +245,7 @@ class Invoice
         return $this->depositReduce;
     }
 
-    public function setDepositReeduce(?float $depositReduce): static
+    public function setDepositReduce(?float $depositReduce): static
     {
         $this->depositReduce = $depositReduce;
 

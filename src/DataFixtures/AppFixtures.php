@@ -130,72 +130,71 @@ class AppFixtures extends Fixture
             'Chèque-cadeau',
             'Financement ou crédit',
         ];
-        foreach ($companies as $company) {
-            $quotation = new Quotation();
-            $quotation->setCompany($company); 
-            $quotation->setCustomer($customers[array_rand($customers)]);
-            $quotation->setTitle("Devis");
-            $quotation->setDescription("Description du devis ");
-            $quotation->setQuoteNumber("Q-00" . $quotation->getId());
-            $quotation->setFromDate(new \DateTime());
-            $quotation->setDeliveryDate(new \DateTime());
-            $quotation->setTotalPrice(rand(1, 1000000));
-            $quotation->setVat(20);
-            $quotation->setDeposit(rand(50, 200));
-            $quotation->setDepositDate(new \DateTime());
-
-            $randomValidityDays = $validityDaysOptions[array_rand($validityDaysOptions)];
-            $validityDuration = new \DateTime();
-            $validityDuration->add(new \DateInterval("P{$randomValidityDays}D"));
-            $quotation->setQuoteValidityDuration($validityDuration);
-
-            $randomPaymentMethod = $paymentMethods[array_rand($paymentMethods)];
-            $quotation->setPaymentMethod($randomPaymentMethod);
-
-            $quotation->setQuoteValidityDuration(new \DateTime());
-            $quotation->setPaymentDateLimit(new \DateTime());
-
-            $quotation->setPaymentDays("30 jours");
-            $randomStatusIndex = array_rand($statusOptions);
-            $quotation->setStatus($statusOptions[$randomStatusIndex]);
-            $quotation->setCreatedAt(new \DateTime());
-
-            $manager->persist($quotation);
-        }
-    $manager->flush();
-
-    foreach ($companies as $company) {
         
-        for ($i = 1; $i <= 5; $i++) {
-            $invoice = new Invoice();
-            $invoice->setCompany($company);
-            $invoice->setCustomer($customers[array_rand($customers)]);
-            $invoice->setTitle("Facture $i");
-            $invoice->setDescription("Description de la facture $i");
-            $invoice->setBillNumber("BILL-00$i");
-            $invoice->setFromDate(new \DateTime());
-            $invoice->setDeliveryDate(new \DateTime());
-            $invoice->setTotalPrice(rand(1, 1000000));
-            $invoice->setVat(20);
-
-            $billValidityDuration = new \DateTime();
-            $billValidityDuration->add(new \DateInterval('P30D'));
-            $invoice->setBillValidityDuration($billValidityDuration);
-
-            $invoice->setDepositReeduce(rand(50, 200));
-            $invoice->setStatus('paid');
-            $invoice->setPaymentMethod('Carte bancaire');
-            $invoice->setPaymentDays("30 jours");
-            $paymentDateLimit = new \DateTime();
-            $paymentDateLimit->add(new \DateInterval('P15D'));
-            
-            $invoice->setPaymentDateLimit($paymentDateLimit);
-
-            $invoice->setCreatedAt(new \DateTime());
-
-            $manager->persist($invoice);
+        foreach ($companies as $company) {
+            for ($i = 1; $i <= 5; $i++) {
+                $quotation = new Quotation();
+                $quotation->setCompany($company); 
+                $customer = $customers[array_rand($customers)];
+                $quotation->setCustomer($customer);
+                $quotation->setTitle("Devis");
+                $quotation->setDescription("Description du devis ");
+                $quotation->setQuoteNumber("Q-" . uniqid());
+                $quotation->setFromDate(new \DateTime());
+                $quotation->setDeliveryDate(new \DateTime());
+                $quotation->setTotalPrice(rand(1, 1000000));
+                $quotation->setVat(20);
+                $quotation->setDeposit(rand(50, 200));
+                $quotation->setDepositDate(new \DateTime());
+        
+                $randomValidityDays = $validityDaysOptions[array_rand($validityDaysOptions)];
+                $validityDuration = new \DateTime();
+                $validityDuration->add(new \DateInterval("P{$randomValidityDays}D"));
+                $quotation->setQuoteValidityDuration($validityDuration);
+        
+                $randomPaymentMethod = $paymentMethods[array_rand($paymentMethods)];
+                $quotation->setPaymentMethod($randomPaymentMethod);
+        
+                $quotation->setQuoteValidityDuration(new \DateTime());
+                $quotation->setPaymentDateLimit(new \DateTime());
+        
+                $quotation->setPaymentDays("30 jours");
+                $randomStatusIndex = array_rand($statusOptions);
+                $quotation->setStatus($statusOptions[$randomStatusIndex]);
+                $quotation->setCreatedAt(new \DateTime());
+        
+                $manager->persist($quotation);
+        
+                // Création de la facture associée au devis
+                $invoice = new Invoice();
+                $invoice->setCompany($company);
+                $invoice->setCustomer($customer);
+                $invoice->setTitle("Facture $i");
+                $invoice->setDescription("Description de la facture $i");
+                $invoice->setBillNumber("BILL-00$i");
+                $invoice->setFromDate(new \DateTime());
+                $invoice->setDeliveryDate(new \DateTime());
+                $invoice->setTotalPrice(rand(1, 1000000));
+                $invoice->setVat(20);
+        
+                $billValidityDuration = new \DateTime();
+                $billValidityDuration->add(new \DateInterval('P30D'));
+                $invoice->setBillValidityDuration($billValidityDuration);
+        
+                $invoice->setDepositReduce(rand(50, 200));
+                $invoice->setStatus('paid');
+                $invoice->setPaymentMethod('Carte bancaire');
+                $invoice->setPaymentDays("30 jours");
+                $paymentDateLimit = new \DateTime();
+                $paymentDateLimit->add(new \DateInterval('P15D'));
+                $invoice->setPaymentDateLimit($paymentDateLimit);
+        
+                $invoice->setCreatedAt(new \DateTime());
+                $invoice->setQuotation($quotation);
+        
+                $manager->persist($invoice);
             }
-        }
-        $manager->flush();
+        }   
+        $manager->flush();        
     }
 }
