@@ -71,9 +71,6 @@ class Invoice
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: Credit::class, orphanRemoval: true)]
-    private Collection $credits;
-
     #[ORM\OneToOne(inversedBy: 'invoice', cascade: ['persist', 'remove'])]
     private ?Quotation $quotation = null;
 
@@ -82,7 +79,6 @@ class Invoice
     public function __construct()
     {
         $this->services = new ArrayCollection();
-        $this->credits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -308,36 +304,6 @@ class Invoice
     public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Credit>
-     */
-    public function getCredits(): Collection
-    {
-        return $this->credits;
-    }
-
-    public function addCredit(Credit $credit): static
-    {
-        if (!$this->credits->contains($credit)) {
-            $this->credits->add($credit);
-            $credit->setInvoice($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCredit(Credit $credit): static
-    {
-        if ($this->credits->removeElement($credit)) {
-            // set the owning side to null (unless already changed)
-            if ($credit->getInvoice() === $this) {
-                $credit->setInvoice(null);
-            }
-        }
 
         return $this;
     }

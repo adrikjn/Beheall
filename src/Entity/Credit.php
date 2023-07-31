@@ -26,10 +26,6 @@ class Credit
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
 
-    #[ORM\ManyToOne(inversedBy: 'credits')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Invoice $invoice = null;
-
     #[ORM\OneToMany(mappedBy: 'credit', targetEntity: Services::class, orphanRemoval: true)]
     private Collection $services;
 
@@ -87,18 +83,6 @@ class Credit
     public function setCustomer(?Customer $customer): static
     {
         $this->customer = $customer;
-
-        return $this;
-    }
-
-    public function getInvoice(): ?Invoice
-    {
-        return $this->invoice;
-    }
-
-    public function setInvoice(?Invoice $invoice): static
-    {
-        $this->invoice = $invoice;
 
         return $this;
     }
