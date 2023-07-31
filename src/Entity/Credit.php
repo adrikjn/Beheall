@@ -53,6 +53,10 @@ class Credit
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[ORM\OneToOne(inversedBy: 'credit', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Invoice $invoice = null;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -209,6 +213,18 @@ class Credit
     public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getInvoice(): ?Invoice
+    {
+        return $this->invoice;
+    }
+
+    public function setInvoice(Invoice $invoice): static
+    {
+        $this->invoice = $invoice;
 
         return $this;
     }

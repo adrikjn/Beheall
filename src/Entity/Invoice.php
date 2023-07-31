@@ -74,6 +74,9 @@ class Invoice
     #[ORM\OneToOne(inversedBy: 'invoice', cascade: ['persist', 'remove'])]
     private ?Quotation $quotation = null;
 
+    #[ORM\OneToOne(mappedBy: 'invoice', cascade: ['persist', 'remove'])]
+    private ?Credit $credit = null;
+
     
 
     public function __construct()
@@ -316,6 +319,23 @@ class Invoice
     public function setQuotation(?Quotation $quotation): static
     {
         $this->quotation = $quotation;
+
+        return $this;
+    }
+
+    public function getCredit(): ?Credit
+    {
+        return $this->credit;
+    }
+
+    public function setCredit(Credit $credit): static
+    {
+        // set the owning side of the relation if necessary
+        if ($credit->getInvoice() !== $this) {
+            $credit->setInvoice($this);
+        }
+
+        $this->credit = $credit;
 
         return $this;
     }
