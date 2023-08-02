@@ -254,17 +254,17 @@ class Company
     #[Groups("company:read")] 
     public function getDataForCompany(): array
     {
-        $customerNames = $this->customers->map(fn(Customer $customer) => $customer->getFirstName() . ' ' . $customer->getLastName())->toArray();
+        $userEmail = $this->user ? $this->user->getEmail() : null;
+        $companyNameWithEmail = $this->name . ' (' . $this->email . ')';
         $quoteNumbers = $this->quotations->map(fn(Quotation $quotation) => $quotation->getQuoteNumber())->toArray();
         $billNumbers = $this->invoices->map(fn(Invoice $invoice) => $invoice->getBillNumber())->toArray();
         $creditNumbers = $this->credits->map(fn(Credit $credit) => $credit->getCreditNumber())->toArray();
-        $userEmail = $this->user ? $this->user->getEmail() : null;
-        return [           
-            'customerNames' => implode(' / ', $customerNames) . ' ' . $this->name,
+        return [     
+            'userEmail' => $userEmail,      
+            'companyNameWithEmail' => $companyNameWithEmail,
             'quoteNumbers' => $quoteNumbers,
             'billNumbers' => $billNumbers,
             'creditNumbers' => $creditNumbers,
-            'userEmail' => $userEmail,
         ];
     }
 
