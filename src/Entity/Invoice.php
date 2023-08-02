@@ -6,82 +6,106 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\InvoiceRepository;
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['invoice:read']],
+    denormalizationContext: ['groups' => ['invoice:create']]
+)]
 #[ORM\Entity(repositoryClass: InvoiceRepository::class)]
 class Invoice
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?Company $company = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?Customer $customer = null;
 
     #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: Services::class, orphanRemoval: true)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private Collection $services;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?string $billNumber = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?\DateTimeInterface $fromDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?\DateTimeInterface $deliveryDate = null;
 
     #[ORM\Column]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?float $totalPrice = null;
 
     #[ORM\Column]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?float $vat = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?\DateTimeInterface $billValidityDuration = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?float $depositReduce = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?string $status = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?string $paymentMethod = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?string $paymentDays = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?\DateTimeInterface $paymentDateLimit = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['invoice:read'])] 
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\OneToOne(inversedBy: 'invoice', cascade: ['persist', 'remove'])]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?Quotation $quotation = null;
 
     #[ORM\OneToOne(mappedBy: 'invoice', cascade: ['persist', 'remove'])]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private ?Credit $credit = null;
-
-    
 
     public function __construct()
     {
         $this->services = new ArrayCollection();
+        $this->createdAt = new DateTime();
     }
 
     public function getId(): ?int

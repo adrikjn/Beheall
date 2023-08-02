@@ -105,16 +105,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups("user:read")] 
     private Collection $companies;
 
-    #[Groups("user:read")] 
-    public function getCompaniesNames(): array
-    {
-        $names = [];
-        foreach ($this->companies as $company) {
-            $names[] = $company->getName();
-        }
-        return $names;
-    }
-
     public function __construct()
     {
         $this->createdAt = new DateTime();

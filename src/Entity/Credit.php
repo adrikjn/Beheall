@@ -6,60 +6,80 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CreditRepository;
 use ApiPlatform\Metadata\ApiResource;
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['credit:read']],
+    denormalizationContext: ['groups' => ['credit:create']]
+)]
 #[ORM\Entity(repositoryClass: CreditRepository::class)]
 class Credit
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['credit:read', 'credit:create'])] 
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'credits')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['credit:read', 'credit:create'])] 
     private ?Company $company = null;
 
     #[ORM\ManyToOne(inversedBy: 'credits')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['credit:read', 'credit:create'])] 
     private ?Customer $customer = null;
 
     #[ORM\OneToMany(mappedBy: 'credit', targetEntity: Services::class, orphanRemoval: true)]
+    #[Groups(['credit:read', 'credit:create'])] 
     private Collection $services;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['credit:read', 'credit:create'])] 
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['credit:read', 'credit:create'])] 
     private ?string $creditNumber = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['credit:read', 'credit:create'])] 
     private ?string $refundReason = null;
 
     #[ORM\Column]
+    #[Groups(['credit:read', 'credit:create'])] 
     private ?float $refundedPrice = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['credit:read', 'credit:create'])] 
     private ?\DateTimeInterface $creditValidityDuration = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['credit:read', 'credit:create'])] 
     private ?string $status = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['credit:read', 'credit:create'])] 
     private ?string $refundMethod = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['credit:read'])] 
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\OneToOne(inversedBy: 'credit', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['credit:read', 'credit:create'])] 
     private ?Invoice $invoice = null;
 
     public function __construct()
     {
         $this->services = new ArrayCollection();
+        $this->createdAt = new DateTime();
+
     }
 
     public function getId(): ?int

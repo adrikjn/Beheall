@@ -2,85 +2,109 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\QuotationRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['quotation:read']],
+    denormalizationContext: ['groups' => ['quotation:create']]
+)]
 #[ORM\Entity(repositoryClass: QuotationRepository::class)]
 class Quotation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'quotations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?Company $company = null;
 
     #[ORM\ManyToOne(inversedBy: 'quotations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?Customer $customer = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?string $quoteNumber = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?\DateTimeInterface $fromDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?\DateTimeInterface $deliveryDate = null;
 
     #[ORM\Column]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?float $totalPrice = null;
 
     #[ORM\Column]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?float $vat = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?\DateTimeInterface $quoteValidityDuration = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?float $deposit = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?\DateTimeInterface $depositDate = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?string $paymentMethod = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?string $paymentDays = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?\DateTimeInterface $paymentDateLimit = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?string $status = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['quotation:read'])] 
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\OneToMany(mappedBy: 'quotation', targetEntity: Services::class, orphanRemoval: true)]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private Collection $services;
 
     #[ORM\OneToOne(mappedBy: 'quotation', cascade: ['persist', 'remove'])]
+    #[Groups(['quotation:read', 'quotation:create'])] 
     private ?Invoice $invoice = null;
-
-
 
     public function __construct()
     {
+        $this->createdAt = new DateTime();
         $this->services = new ArrayCollection();
     }
 

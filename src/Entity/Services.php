@@ -2,51 +2,70 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ServicesRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['service:read']],
+    denormalizationContext: ['groups' => ['service:create']]
+)]
 #[ORM\Entity(repositoryClass: ServicesRepository::class)]
 class Services
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['service:read', 'service:create'])] 
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['service:read', 'service:create'])] 
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['service:read', 'service:create'])] 
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Groups(['service:read', 'service:create'])] 
     private ?int $quantity = null;
 
     #[ORM\Column]
+    #[Groups(['service:read', 'service:create'])] 
     private ?float $unitCost = null;
 
     #[ORM\Column]
+    #[Groups(['service:read', 'service:create'])] 
     private ?float $totalPrice = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['service:read'])] 
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['service:read', 'service:create'])] 
     private ?Quotation $quotation = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['service:read', 'service:create'])] 
     private ?Invoice $invoice = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['service:read', 'service:create'])] 
     private ?Credit $credit = null;
 
-    
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
+
 
     public function getId(): ?int
     {

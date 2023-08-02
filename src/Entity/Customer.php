@@ -25,63 +25,83 @@ class Customer
 
     #[ORM\ManyToOne(inversedBy: 'customers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $companyName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $activity = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $address = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $addressLine2 = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $postalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $website = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $country = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $companyAddress = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $billingAddress = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $phoneNumber = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['customer:read', 'customer:create'])] 
     private ?string $notes = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['customer:read'])] 
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Quotation::class, orphanRemoval: true)]
+    #[Groups(['customer:read'])] 
     private Collection $quotations;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Invoice::class, orphanRemoval: true)]
+    #[Groups(['customer:read'])] 
     private Collection $invoices;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Credit::class, orphanRemoval: true)]
+    #[Groups(['customer:read'])] 
     private Collection $credits;
 
     public function __construct()
