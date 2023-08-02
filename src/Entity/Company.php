@@ -28,6 +28,7 @@ class Company
 
     #[ORM\ManyToOne(inversedBy: 'companies')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['company:read', 'company:create'])] 
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]
@@ -251,22 +252,7 @@ class Company
     #[Groups("company:read")] 
     private Collection $credits;
 
-    #[Groups("company:read")] 
-    public function getDataForCompany(): array
-    {
-        $userEmail = $this->user ? $this->user->getEmail() : null;
-        $companyNameWithEmail = $this->name . ' (' . $this->email . ')';
-        $quoteNumbers = $this->quotations->map(fn(Quotation $quotation) => $quotation->getQuoteNumber())->toArray();
-        $billNumbers = $this->invoices->map(fn(Invoice $invoice) => $invoice->getBillNumber())->toArray();
-        $creditNumbers = $this->credits->map(fn(Credit $credit) => $credit->getCreditNumber())->toArray();
-        return [     
-            'userEmail' => $userEmail,      
-            'companyNameWithEmail' => $companyNameWithEmail,
-            'quoteNumbers' => $quoteNumbers,
-            'billNumbers' => $billNumbers,
-            'creditNumbers' => $creditNumbers,
-        ];
-    }
+   
 
     public function __construct()
     {
