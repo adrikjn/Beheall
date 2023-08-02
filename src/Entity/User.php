@@ -100,7 +100,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups("user:read")] 
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Company::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', 
+    targetEntity: Company::class, orphanRemoval: true)]
+    #[Groups("user:read")] 
     private Collection $companies;
 
 
