@@ -14,12 +14,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['company:read']],
+    denormalizationContext: ['groups' => ['company:create']]
+)]
 class Company
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['company:read', 'company:create'])] 
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'companies')]
@@ -34,10 +38,11 @@ class Company
         minMessage: "Le nom doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
     )]
-    #[Groups(['user:read'])] 
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $logo = null;
 
     #[ORM\Column(length: 255)]
@@ -48,6 +53,7 @@ class Company
         minMessage: "L'adresse doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'adresse ne peut pas dépasser {{ limit }} caractères."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
@@ -72,6 +78,7 @@ class Company
         pattern:"/^\+?[0-9]+$/",
         message:"Le numéro de téléphone doit contenir seulement des chiffres et un signe '+'."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255)]
@@ -82,6 +89,7 @@ class Company
         minMessage: "La ville doit comporter au moins {{ limit }} caractères.",
         maxMessage: "La ville ne peut pas dépasser {{ limit }} caractères."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
@@ -90,6 +98,7 @@ class Company
         pattern: "/^\d{5}$/",
         message: "Le code postal doit contenir exactement 5 chiffres."
     )]  
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $postalCode = null;
 
     #[ORM\Column(length: 255)]
@@ -100,10 +109,12 @@ class Company
         minMessage: "Le pays doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le pays ne peut pas dépasser {{ limit }} caractères."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $country = null;
 
     #[ORM\Column]
     #[Assert\NotBlank(message: "Le champ ne peut pas être vide.")]
+    #[Groups(['company:read', 'company:create'])] 
     private ?bool $billingIsDifferent = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -111,6 +122,7 @@ class Company
         max: 70,
         maxMessage: "L'adresse de facturation ne peut pas dépasser {{ limit }} caractères."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $billingAddress = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -118,6 +130,7 @@ class Company
         max: 30,
         maxMessage: "La ville de facturation ne peut pas dépasser {{ limit }} caractères."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $billingCity = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -125,6 +138,7 @@ class Company
         pattern: "/^\d{5}$/",
         message: "Le code postal doit contenir exactement 5 chiffres."
     )] 
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $billingPostalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -132,6 +146,7 @@ class Company
         max:40,
         maxMessage: "Le pays ne peut pas dépasser {{ limit }} caractères."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $billingCountry = null;
 
     #[ORM\Column(length: 255)]
@@ -140,6 +155,7 @@ class Company
         pattern: "/^[0-9]{9}|[0-9]{14}$/",
         message: "Le numéro SIREN/SIRET ne peut contenir que des chiffres (9 ou 14 chiffres requis)."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $sirenSiret = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -150,6 +166,7 @@ class Company
         minMessage: "La forme juridique doit comporter au moins {{ limit }} caractères.",
         maxMessage: "La forme juridique ne peut pas dépasser {{ limit }} caractères."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $legalForm = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -158,6 +175,7 @@ class Company
         min: 10,
         max: 10
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $rmNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -165,6 +183,7 @@ class Company
         exactly: 9,
         exactMessage: "Le numéro RCS/RC doit contenir exactement {{ limit }} chiffres."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $rcsNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -172,6 +191,7 @@ class Company
         pattern: '/^[0-9]+$/',
         message: 'Le capital social ne peut contenir que des chiffres.'
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $shareCapital = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -179,6 +199,7 @@ class Company
         max: 30,
         maxMessage: "La ville de facturation ne peut pas dépasser {{ limit }} caractères."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $cityRegistration = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -186,10 +207,12 @@ class Company
         pattern: '/^FR[0-9A-Z]{2}[0-9]{9}$/i',
         message: 'Le numéro de TVA intracommunautaire doit être au format FR12345678901.'
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $vatId = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Url(message: "L'adresse du site web n'est pas une URL valide.")]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $website = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -197,6 +220,7 @@ class Company
         max: 500,
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $descriptionWork = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -204,6 +228,7 @@ class Company
         max: 5000,
         maxMessage: "Les conditions générales de vente ne peuvent pas dépasser {{ limit }} caractères."
     )]
+    #[Groups(['company:read', 'company:create'])] 
     private ?string $gcs = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -211,16 +236,37 @@ class Company
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Customer::class, orphanRemoval: true)]
+    #[Groups("company:read")] 
     private Collection $customers;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Quotation::class, orphanRemoval: true)]
+    #[Groups("company:read")] 
     private Collection $quotations;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Invoice::class, orphanRemoval: true)]
+    #[Groups("company:read")] 
     private Collection $invoices;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Credit::class, orphanRemoval: true)]
+    #[Groups("company:read")] 
     private Collection $credits;
+
+    #[Groups("company:read")] 
+    public function getDataForCompany(): array
+    {
+        $customerNames = $this->customers->map(fn(Customer $customer) => $customer->getFirstName() . ' ' . $customer->getLastName())->toArray();
+        $quoteNumbers = $this->quotations->map(fn(Quotation $quotation) => $quotation->getQuoteNumber())->toArray();
+        $billNumbers = $this->invoices->map(fn(Invoice $invoice) => $invoice->getBillNumber())->toArray();
+        $creditNumbers = $this->credits->map(fn(Credit $credit) => $credit->getCreditNumber())->toArray();
+        $userEmail = $this->user ? $this->user->getEmail() : null;
+        return [           
+            'customerNames' => implode(' / ', $customerNames) . ' ' . $this->name,
+            'quoteNumbers' => $quoteNumbers,
+            'billNumbers' => $billNumbers,
+            'creditNumbers' => $creditNumbers,
+            'userEmail' => $userEmail,
+        ];
+    }
 
     public function __construct()
     {
