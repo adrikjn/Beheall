@@ -10,17 +10,19 @@ use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use Doctrine\ORM\Mapping as ORM;
+use App\State\UserPasswordHasher;
 use App\Repository\UserRepository;
-use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
-use App\State\UserPasswordHasher;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ApiResource(
     operations: [
@@ -34,6 +36,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:create']]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['email' => 'exact'])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity('email')]
 #[ORM\Table(name: '`user`')]
