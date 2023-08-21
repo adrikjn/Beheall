@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
@@ -105,7 +106,8 @@ class Customer
     private Collection $credits;
 
     public function __construct()
-    {
+    {   
+        $this->createdAt = new DateTime();
         $this->quotations = new ArrayCollection();
         $this->invoices = new ArrayCollection();
         $this->credits = new ArrayCollection();
