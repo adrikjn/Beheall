@@ -39,7 +39,7 @@ class Company
         minMessage: "Le nom doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
     )]*/
-    #[Groups(['company:read', 'company:create', 'user:read'])] 
+    #[Groups(['company:read', 'company:create', 'user:read', 'invoice:read'])] 
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]

@@ -26,7 +26,7 @@ class Customer
 
     #[ORM\ManyToOne(inversedBy: 'customers')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['customer:read', 'customer:create'])] 
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]
