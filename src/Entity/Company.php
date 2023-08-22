@@ -23,7 +23,7 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company:read', 'company:create'])] 
+    #[Groups(['company:read', 'company:create', 'user:read'])] 
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'companies')]
@@ -39,7 +39,7 @@ class Company
         minMessage: "Le nom doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
     )]*/
-    #[Groups(['company:read', 'company:create'])] 
+    #[Groups(['company:read', 'company:create', 'user:read'])] 
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -55,7 +55,7 @@ class Company
         minMessage: "L'adresse doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'adresse ne peut pas dépasser {{ limit }} caractères."
     )]*/
-    #[Groups(['company:read', 'company:create'])] 
+    #[Groups(['company:read', 'company:create' , 'user:read'])] 
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
