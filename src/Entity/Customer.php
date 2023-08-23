@@ -21,7 +21,7 @@ class Customer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['customer:read', 'customer:create'])] 
+    #[Groups(['customer:read', 'customer:create', 'company:read'])] 
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'customers')]
@@ -30,15 +30,15 @@ class Customer
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['customer:read', 'customer:create'])] 
+    #[Groups(['customer:read', 'customer:create', 'company:read'])] 
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['customer:read', 'customer:create'])] 
+    #[Groups(['customer:read', 'customer:create', 'company:read'])] 
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:create'])] 
+    #[Groups(['customer:read', 'customer:create', 'company:read'])] 
     private ?string $companyName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
