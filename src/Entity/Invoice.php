@@ -34,10 +34,6 @@ class Invoice
     #[Groups(['invoice:read', 'invoice:create'])] 
     private ?Customer $customer = null;
 
-    #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: Services::class, orphanRemoval: true)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
-    private Collection $services;
-
     #[ORM\Column(length: 255)]
     #[Groups(['invoice:read', 'invoice:create'])] 
     private ?string $title = null;
@@ -102,10 +98,13 @@ class Invoice
     #[Groups(['invoice:read', 'invoice:create'])] 
     private ?Credit $credit = null;
 
+    #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: Services::class, orphanRemoval: true)]
+    private Collection $services;
+
     public function __construct()
     {
-        $this->services = new ArrayCollection();
         $this->createdAt = new DateTime();
+        $this->services = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -133,36 +132,6 @@ class Invoice
     public function setCustomer(?Customer $customer): static
     {
         $this->customer = $customer;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Services>
-     */
-    public function getServices(): Collection
-    {
-        return $this->services;
-    }
-
-    public function addService(Services $service): static
-    {
-        if (!$this->services->contains($service)) {
-            $this->services->add($service);
-            $service->setInvoice($this);
-        }
-
-        return $this;
-    }
-
-    public function removeService(Services $service): static
-    {
-        if ($this->services->removeElement($service)) {
-            // set the owning side to null (unless already changed)
-            if ($service->getInvoice() === $this) {
-                $service->setInvoice(null);
-            }
-        }
 
         return $this;
     }
@@ -360,6 +329,36 @@ class Invoice
         }
 
         $this->credit = $credit;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Services>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Services $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->setInvoice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Services $service): static
+    {
+        if ($this->services->removeElement($service)) {
+            // set the owning side to null (unless already changed)
+            if ($service->getInvoice() === $this) {
+                $service->setInvoice(null);
+            }
+        }
 
         return $this;
     }
