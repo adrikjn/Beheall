@@ -193,11 +193,8 @@ class AppFixtures extends Fixture
                 $invoice->setTotalPrice(rand(1, 1000000));
                 $invoice->setVat(20);
         
-                $billValidityDuration = new \DateTime();
-                $billValidityDuration->add(new \DateInterval('P30D'));
-                $invoice->setBillValidityDuration($billValidityDuration);
+                $invoice->setBillValidityDuration("30 jours");
         
-                $invoice->setDepositReduce(rand(50, 200));
                 $invoice->setStatus($statusOptions[$randomStatusIndex]);
                 $invoice->setPaymentMethod($randomPaymentMethod);
                 $invoice->setPaymentDays("30 jours");

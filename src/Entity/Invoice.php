@@ -62,13 +62,6 @@ class Invoice
     #[Groups(['invoice:read', 'invoice:create'])] 
     private ?float $vat = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
-    private ?\DateTimeInterface $billValidityDuration = null;
-
-    #[ORM\Column(nullable: true)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
-    private ?float $depositReduce = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['invoice:read', 'invoice:create'])] 
@@ -99,7 +92,12 @@ class Invoice
     private ?Credit $credit = null;
 
     #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: Services::class, orphanRemoval: true)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
     private Collection $services;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['invoice:read', 'invoice:create'])] 
+    private ?string $billValidityDuration = null;
 
     public function __construct()
     {
@@ -220,30 +218,6 @@ class Invoice
         return $this;
     }
 
-    public function getBillValidityDuration(): ?\DateTimeInterface
-    {
-        return $this->billValidityDuration;
-    }
-
-    public function setBillValidityDuration(\DateTimeInterface $billValidityDuration): static
-    {
-        $this->billValidityDuration = $billValidityDuration;
-
-        return $this;
-    }
-
-    public function getDepositReduce(): ?float
-    {
-        return $this->depositReduce;
-    }
-
-    public function setDepositReduce(?float $depositReduce): static
-    {
-        $this->depositReduce = $depositReduce;
-
-        return $this;
-    }
-
     public function getStatus(): ?string
     {
         return $this->status;
@@ -359,6 +333,18 @@ class Invoice
                 $service->setInvoice(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBillValidityDuration(): ?string
+    {
+        return $this->billValidityDuration;
+    }
+
+    public function setBillValidityDuration(string $billValidityDuration): static
+    {
+        $this->billValidityDuration = $billValidityDuration;
 
         return $this;
     }
