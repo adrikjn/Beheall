@@ -94,13 +94,12 @@ class Quotation
     #[Groups(['quotation:read'])] 
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'quotation', targetEntity: Services::class, orphanRemoval: true)]
-    #[Groups(['quotation:read', 'quotation:create'])] 
-    private Collection $services;
-
     #[ORM\OneToOne(mappedBy: 'quotation', cascade: ['persist', 'remove'])]
     #[Groups(['quotation:read', 'quotation:create'])] 
     private ?Invoice $invoice = null;
+
+    #[ORM\OneToMany(mappedBy: 'quotation', targetEntity: Services::class)]
+    private Collection $services;
 
     public function __construct()
     {
@@ -317,6 +316,29 @@ class Quotation
         return $this;
     }
 
+
+    public function getInvoice(): ?Invoice
+    {
+        return $this->invoice;
+    }
+
+    public function setInvoice(?Invoice $invoice): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($invoice === null && $this->invoice !== null) {
+            $this->invoice->setQuotation(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($invoice !== null && $invoice->getQuotation() !== $this) {
+            $invoice->setQuotation($this);
+        }
+
+        $this->invoice = $invoice;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Services>
      */
@@ -343,28 +365,6 @@ class Quotation
                 $service->setQuotation(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getInvoice(): ?Invoice
-    {
-        return $this->invoice;
-    }
-
-    public function setInvoice(?Invoice $invoice): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($invoice === null && $this->invoice !== null) {
-            $this->invoice->setQuotation(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($invoice !== null && $invoice->getQuotation() !== $this) {
-            $invoice->setQuotation($this);
-        }
-
-        $this->invoice = $invoice;
 
         return $this;
     }

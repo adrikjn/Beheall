@@ -47,19 +47,17 @@ class Services
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
+    #[Groups(['service:read', 'service:create'])] 
     #[ORM\JoinColumn(nullable: false)]
+    private ?Invoice $invoice = null;
+
+    #[ORM\ManyToOne(inversedBy: 'services')]
     #[Groups(['service:read', 'service:create'])] 
     private ?Quotation $quotation = null;
 
-  
     #[ORM\ManyToOne(inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)]
     #[Groups(['service:read', 'service:create'])] 
     private ?Credit $credit = null;
-
-    #[ORM\ManyToOne(inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Invoice $invoice = null;
 
     public function __construct()
     {
@@ -144,6 +142,19 @@ class Services
         return $this;
     }
 
+
+    public function getInvoice(): ?Invoice
+    {
+        return $this->invoice;
+    }
+
+    public function setInvoice(?Invoice $invoice): static
+    {
+        $this->invoice = $invoice;
+
+        return $this;
+    }
+
     public function getQuotation(): ?Quotation
     {
         return $this->quotation;
@@ -164,18 +175,6 @@ class Services
     public function setCredit(?Credit $credit): static
     {
         $this->credit = $credit;
-
-        return $this;
-    }
-
-    public function getInvoice(): ?Invoice
-    {
-        return $this->invoice;
-    }
-
-    public function setInvoice(?Invoice $invoice): static
-    {
-        $this->invoice = $invoice;
 
         return $this;
     }
