@@ -60,6 +60,7 @@ class Services
     private ?Credit $credit = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['service:read', 'service:create'])] 
     private ?float $vat = null;
 
     public function __construct()
