@@ -59,6 +59,9 @@ class Services
     #[Groups(['service:read', 'service:create'])] 
     private ?Credit $credit = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $vat = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
@@ -175,6 +178,18 @@ class Services
     public function setCredit(?Credit $credit): static
     {
         $this->credit = $credit;
+
+        return $this;
+    }
+
+    public function getVat(): ?float
+    {
+        return $this->vat;
+    }
+
+    public function setVat(?float $vat): static
+    {
+        $this->vat = $vat;
 
         return $this;
     }
