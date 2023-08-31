@@ -19,31 +19,31 @@ class Services
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['service:read', 'service:create'])] 
+    #[Groups(['invoice:read','service:read', 'service:create'])] 
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['service:read', 'service:create'])] 
+    #[Groups(['invoice:read','service:read', 'service:create'])] 
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['service:read', 'service:create'])] 
+    #[Groups(['invoice:read','service:read', 'service:create'])] 
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['service:read', 'service:create'])] 
+    #[Groups(['invoice:read','service:read', 'service:create'])] 
     private ?int $quantity = null;
 
     #[ORM\Column]
-    #[Groups(['service:read', 'service:create'])] 
+    #[Groups(['invoice:read','service:read', 'service:create'])] 
     private ?float $unitCost = null;
 
     #[ORM\Column]
-    #[Groups(['service:read', 'service:create'])] 
+    #[Groups(['invoice:read','service:read', 'service:create'])] 
     private ?float $totalPrice = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['service:read'])] 
+    #[Groups(['invoice:read','service:read'])] 
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
