@@ -21,7 +21,7 @@ class Invoice
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create','company:read'])] 
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
@@ -31,7 +31,7 @@ class Invoice
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create','company:read'])] 
     private ?Customer $customer = null;
 
     #[ORM\Column(length: 255)]
@@ -64,7 +64,7 @@ class Invoice
 
 
     #[ORM\Column(length: 255)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create','company:read'])] 
     private ?string $status = null;
 
     #[ORM\Column(length: 255)]
