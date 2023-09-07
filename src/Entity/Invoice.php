@@ -55,7 +55,7 @@ class Invoice
     private ?\DateTimeInterface $deliveryDate = null;
 
     #[ORM\Column]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create', 'company:read'])] 
     private ?float $totalPrice = null;
 
     #[ORM\Column]
@@ -80,7 +80,7 @@ class Invoice
     private ?\DateTimeInterface $paymentDateLimit = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['invoice:read'])] 
+    #[Groups(['invoice:read','company:read'])] 
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\OneToOne(inversedBy: 'invoice', cascade: ['persist', 'remove'])]
