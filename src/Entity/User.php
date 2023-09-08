@@ -108,7 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     #[Assert\Regex(
         pattern: "/^\+?[0-9]+$/",
-        message: "Le numéro de téléphone doit contenir seulement des chiffres et un signe '+'."
+        message: "Le numéro de téléphone doit contenir seulement des chiffres ou/et un signe '+'."
     )]
     #[Groups(["user:read", "user:create"])]
     private ?string $phoneNumber = null;
