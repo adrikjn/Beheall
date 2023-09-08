@@ -43,7 +43,7 @@ class Invoice
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['company:read','invoice:read', 'invoice:create'])] 
     private ?string $billNumber = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
