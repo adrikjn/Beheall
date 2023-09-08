@@ -38,14 +38,14 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 )]
 #[ApiFilter(SearchFilter::class, properties: ['email' => 'exact'])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity('email')]
+#[UniqueEntity('email', message: "Cet email est déjà utilisé.")]
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:create', 'user:read'])] 
+    #[Groups(['user:create', 'user:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -61,7 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(["user:read"])] 
+    #[Groups(["user:read"])]
     private array $roles = [];
 
     /**
@@ -70,7 +70,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Assert\NotBlank(groups: ['user:create'])]
+    #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide.")]
+    #[Assert\Regex(
+        pattern: "/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&,.])([A-Za-z\d@$!%*#?&,.]{8,})$/",
+        message: "Le mot de passe doit contenir au moins 8 caractères avec au moins 1 chiffre et 1 caractère spécial."
+    )]
     #[Groups(['user:create', 'user:update'])]
     private ?string $plainPassword = null;
 
@@ -103,19 +107,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: "Le numéro de téléphone ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern:"/^\+?[0-9]+$/",
-        message:"Le numéro de téléphone doit contenir seulement des chiffres et un signe '+'."
+        pattern: "/^\+?[0-9]+$/",
+        message: "Le numéro de téléphone doit contenir seulement des chiffres et un signe '+'."
     )]
     #[Groups(["user:read", "user:create"])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups("user:read")] 
+    #[Groups("user:read")]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', 
-    targetEntity: Company::class, orphanRemoval: true)]
-    #[Groups("user:read")] 
+    #[ORM\OneToMany(
+        mappedBy: 'user',
+        targetEntity: Company::class,
+        orphanRemoval: true
+    )]
+    #[Groups("user:read")]
     private Collection $companies;
 
     public function __construct()
