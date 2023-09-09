@@ -183,9 +183,7 @@ class Company
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(
-        min: 10,
         max: 200,
-        minMessage:"La description doit comporter au moins {{ limit }} caractères.",
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
@@ -193,9 +191,7 @@ class Company
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(
-        min: 15,
         max: 1000,
-        minMessage:"Les conditions générales doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Les conditions générales de vente ne peuvent pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
