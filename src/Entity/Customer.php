@@ -143,14 +143,6 @@ class Customer
     private ?string $country = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(
-        max: 70,
-        maxMessage: "L'adresse de facturation ne peut pas dépasser {{ limit }} caractères."
-    )]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
-    private ?string $billingAddress = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     #[Assert\Regex(
         pattern: "/^\+?[0-9]+$/",
@@ -330,18 +322,6 @@ class Customer
     public function setCountry(?string $country): static
     {
         $this->country = $country;
-
-        return $this;
-    }
-
-    public function getBillingAddress(): ?string
-    {
-        return $this->billingAddress;
-    }
-
-    public function setBillingAddress(?string $billingAddress): static
-    {
-        $this->billingAddress = $billingAddress;
 
         return $this;
     }
