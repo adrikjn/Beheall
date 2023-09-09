@@ -36,16 +36,6 @@ class Invoice
     private ?Customer $customer = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Length(
-        min: 1,
-        max: 50,
-        minMessage: "L'objet doit comporter au moins {{ limit }} caractère.",
-        maxMessage: "L'objet ne peut pas dépasser {{ limit }} caractères."
-    )]
-    #[Assert\Regex(
-        pattern: "/^[a-zA-Z0-9\s\-,.!]+$/",
-        message: "L'objet ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des tirets, des points et des points d'exclamation."
-    )]
     #[Groups(['invoice:read', 'invoice:create'])]
     private ?string $title = null;
 
@@ -59,17 +49,10 @@ class Invoice
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     #[Groups(['invoice:read', 'invoice:create'])]
-    #[Assert\Date(message: "La date de début doit être une date valide.")]
     private ?\DateTimeInterface $fromDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['invoice:read', 'invoice:create'])]
-    #[Assert\NotBlank(message: "La date de livraison est obligatoire.")]
-    #[Assert\Date(message: "La date de livraison doit être une date valide.")]
-    #[Assert\GreaterThan(
-        propertyPath: 'fromDate',
-        message: "La date de livraison doit être postérieure à la date de début."
-    )]
     private ?\DateTimeInterface $deliveryDate = null;
 
     #[ORM\Column]
@@ -82,12 +65,10 @@ class Invoice
 
     #[ORM\Column(length: 255)]
     #[Groups(['invoice:read', 'invoice:create'])]
-    #[Assert\NotBlank(message: "Veuillez sélectionner une méthode de paiement.")]
     private ?string $paymentMethod = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['invoice:read', 'invoice:create'])]
-    #[Assert\NotBlank(message: "Veuillez sélectionner une date de paiement limite.")]
     private ?\DateTimeInterface $paymentDateLimit = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
