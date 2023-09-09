@@ -181,6 +181,14 @@ class Customer
     )]
     private ?string $vatId = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Regex(
+        pattern: "/^\d{9}|\d{3}\s\d{3}\s\d{3}\s\d{5}$/",
+        message: "Le numéro SIREN doit comporter 9 chiffres et le numéro SIRET doit comporter 14 chiffres (avec des espaces pour la lisibilité)."
+    )]
+    #[Groups(['company:read', 'company:create', 'invoice:read'])]
+    private ?string $sirenSiret = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
@@ -460,6 +468,18 @@ class Customer
     public function setVatId(?string $vatId): static
     {
         $this->vatId = $vatId;
+
+        return $this;
+    }
+
+    public function getSirenSiret(): ?string
+    {
+        return $this->sirenSiret;
+    }
+
+    public function setSirenSiret(?string $sirenSiret): static
+    {
+        $this->sirenSiret = $sirenSiret;
 
         return $this;
     }
