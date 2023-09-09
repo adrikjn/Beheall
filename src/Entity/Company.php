@@ -53,7 +53,7 @@ class Company
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "L'adresse ne peut pas être vide.")]
     #[Assert\Length(
-        min: 5,
+        min: 8,
         max: 70,
         minMessage: "L'adresse doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'adresse ne peut pas dépasser {{ limit }} caractères."
@@ -125,7 +125,9 @@ class Company
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(
+        min: 8,
         max: 70,
+        minMessage: "L'adresse de facturation doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'adresse de facturation ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
@@ -134,7 +136,7 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Regex(
         pattern: "/^[a-zA-Z\s-]+$/",
-        message: "La ville ne peut contenir que des lettres, des espaces et des traits d'union."
+        message: "La ville de facturation ne peut contenir que des lettres, des espaces et des traits d'union."
     )]
     #[Assert\Length(
         max: 40,
@@ -146,15 +148,17 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Regex(
         pattern: "/^\d{5}$/",
-        message: "Le code postal doit contenir exactement 5 chiffres."
+        message: "Le code postal de facturation doit contenir exactement 5 chiffres."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $billingPostalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(
+        min: 3,
+        minMessage: "Le pays de facturation doit comporter au moins {{ limit }} caractères.",
         max: 40,
-        maxMessage: "Le pays ne peut pas dépasser {{ limit }} caractères."
+        maxMessage: "Le pays de facturation ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $billingCountry = null;
@@ -199,7 +203,7 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(
         max: 40,
-        maxMessage: "La ville de facturation ne peut pas dépasser {{ limit }} caractères."
+        maxMessage: "La ville d'enregistrement ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
         pattern: "/^[a-zA-Z\s-]+$/",
@@ -223,7 +227,9 @@ class Company
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(
+        min: 10,
         max: 200,
+        minMessage:"La description doit comporter au moins {{ limit }} caractères.",
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
@@ -231,7 +237,9 @@ class Company
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(
+        min:15,
         max: 1000,
+        minMessage:"Les conditions générales doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Les conditions générales de vente ne peuvent pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]

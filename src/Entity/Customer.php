@@ -10,6 +10,7 @@ use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['customer:read']],
@@ -21,92 +22,137 @@ class Customer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['customer:read', 'customer:create', 'company:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'company:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'customers')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read', 'invoice:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'invoice:read', 'invoice:read'])]
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['customer:read', 'customer:create', 'company:read', 'invoice:read'])] 
+    #[Assert\NotBlank(message: "Le nom ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: "Le nom doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
+    )]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z -]+$/',
+        message: "Le nom ne doit contenir que des lettres, des espaces et des traits d'union."
+    )]
+    #[Groups(['customer:read', 'customer:create', 'company:read', 'invoice:read'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['customer:read', 'customer:create', 'company:read', 'invoice:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'company:read', 'invoice:read'])]
+    #[Assert\NotBlank(message: "Le prénom ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: "Le prénom doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le prénom ne peut pas dépasser {{ limit }} caractères."
+    )]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z -]+$/',
+        message: "Le prénom ne doit contenir que des lettres, des espaces et des traits d'union."
+    )]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:create', 'company:read', 'invoice:read'])] 
+    #[Assert\Length(
+        max: 40,
+        maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
+    )]
+    #[Assert\Regex(
+        pattern: "/^[A-Za-z0-9\s\-,']+$/",
+        message: "Le nom de l'entreprise ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des tirets et des apostrophes."
+    )]
+    #[Groups(['customer:read', 'customer:create', 'company:read', 'invoice:read'])]
     private ?string $companyName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
+    #[Assert\Email(message: "L'email n'est pas valide.")]
+    #[Assert\Length(
+        max: 50,
+        maxMessage: "L'email ne peut pas dépasser {{ limit }} caractères."
+    )]
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
+    #[Assert\Length(
+        min: 1,
+        max: 50,
+        minMessage: "L'activité commerciale doit comporter au moins {{ limit }} caractère.",
+        maxMessage: "L'activité commerciale ne peut pas dépasser {{ limit }} caractères."
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z0-9\s\-,.!]+$/",
+        message: "L'activité commerciale ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des tirets, des points et des points d'exclamation."
+    )]
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $activity = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $addressLine2 = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $postalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $website = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $country = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $companyAddress = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $billingAddress = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])] 
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $notes = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['customer:read', 'invoice:read'])] 
+    #[Groups(['customer:read', 'invoice:read'])]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Quotation::class, orphanRemoval: true)]
-    #[Groups(['customer:read'])] 
+    #[Groups(['customer:read'])]
     private Collection $quotations;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Invoice::class, orphanRemoval: true)]
-    #[Groups(['customer:read'])] 
+    #[Groups(['customer:read'])]
     private Collection $invoices;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Credit::class, orphanRemoval: true)]
-    #[Groups(['customer:read'])] 
+    #[Groups(['customer:read'])]
     private Collection $credits;
 
     public function __construct()
-    {   
+    {
         $this->createdAt = new DateTime();
         $this->quotations = new ArrayCollection();
         $this->invoices = new ArrayCollection();
