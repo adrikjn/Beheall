@@ -237,7 +237,7 @@ class Company
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(
-        min:15,
+        min: 15,
         max: 1000,
         minMessage:"Les conditions générales doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Les conditions générales de vente ne peuvent pas dépasser {{ limit }} caractères."

@@ -62,7 +62,9 @@ class Customer
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(
+        min: 1,
         max: 40,
+        minMessage: "Le nom doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
@@ -75,7 +77,9 @@ class Customer
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Email(message: "L'email n'est pas valide.")]
     #[Assert\Length(
+        min: 5,
         max: 50,
+        minMessage: "L'email doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'email ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
@@ -96,26 +100,61 @@ class Customer
     private ?string $activity = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'adresse ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 8,
+        max: 70,
+        minMessage: "L'adresse doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "L'adresse ne peut pas dépasser {{ limit }} caractères."
+    )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(
+        min: 8,
+        max: 70,
+        minMessage: "L'adresse doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "L'adresse ne peut pas dépasser {{ limit }} caractères."
+    )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $addressLine2 = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La ville ne peut pas être vide.")]
+    #[Assert\Length(
+        max: 40,
+        maxMessage: "La ville ne peut pas dépasser {{ limit }} caractères."
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z\s-]+$/",
+        message: "La ville ne peut contenir que des lettres, des espaces et des traits d'union."
+    )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le code postal ne peut pas être vide.")]
+    #[Assert\Regex(
+        pattern: "/^\d{5}$/",
+        message: "Le code postal doit contenir exactement 5 chiffres."
+    )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $postalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Url(message: "L'adresse du site web n'est pas une URL valide.")]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $website = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le pays ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 40,
+        minMessage: "Le pays doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le pays ne peut pas dépasser {{ limit }} caractères."
+    )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $country = null;
 
@@ -124,14 +163,31 @@ class Customer
     private ?string $companyAddress = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(
+        min: 8,
+        max: 70,
+        minMessage: "L'adresse de facturation doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "L'adresse de facturation ne peut pas dépasser {{ limit }} caractères."
+    )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $billingAddress = null;
 
     #[ORM\Column(length: 255)]
+
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
+    #[Assert\Regex(
+        pattern: "/^\+?[0-9]+$/",
+        message: "Le numéro de téléphone doit contenir seulement des chiffres ou/et un signe '+'."
+    )]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(
+        min: 10,
+        max: 100,
+        minMessage:"La note doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "La note ne peut pas dépasser {{ limit }} caractères."
+    )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $notes = null;
 
