@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ServicesRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ApiResource(
     normalizationContext: ['groups' => ['service:read']],
@@ -19,48 +21,68 @@ class Services
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['invoice:read','service:read', 'service:create'])] 
+    #[Groups(['invoice:read', 'service:read', 'service:create'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['invoice:read','service:read', 'service:create'])] 
+    #[Groups(['invoice:read', 'service:read', 'service:create'])]
+    #[Assert\NotBlank(message: "Le nom du produit/service ne peut pas être vide.")]
+    #[Assert\Length(
+        min : 1,
+        max : 255,
+        minMessage : "Le nom du produit/service doit comporter au moins {{ limit }} caractère.",
+        maxMessage : "Le nom du produit/service ne peut pas dépasser {{ limit }} caractères."
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z0-9\s\-,.!]+$/",
+        message: "Le nom du produit ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des tirets, des points et des points d'exclamation."
+    )]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['invoice:read','service:read', 'service:create'])] 
+    #[Groups(['invoice:read', 'service:read', 'service:create'])]
+    #[Assert\Length(
+        min: 5,
+        max: 100,
+        minMessage:"La description doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
+    )]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['invoice:read','service:read', 'service:create'])] 
+    #[Groups(['invoice:read', 'service:read', 'service:create'])]
+    #[Assert\NotBlank(message:"La quantité/durée ne peut pas être vide.")]
     private ?int $quantity = null;
 
     #[ORM\Column]
-    #[Groups(['invoice:read','service:read', 'service:create'])] 
+    #[Groups(['invoice:read', 'service:read', 'service:create'])]
+    #[Assert\NotBlank(message:"Le coût unitaire/horaire ne peut pas être vide.")]
     private ?float $unitCost = null;
 
     #[ORM\Column]
-    #[Groups(['invoice:read','service:read', 'service:create'])] 
+    #[Groups(['invoice:read', 'service:read', 'service:create'])]
     private ?float $totalPrice = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['invoice:read','service:read'])] 
+    #[Groups(['invoice:read', 'service:read'])]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
-    #[Groups(['service:read', 'service:create'])] 
+    #[Groups(['service:read', 'service:create'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Invoice $invoice = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
-    #[Groups(['service:read', 'service:create'])] 
+    #[Groups(['service:read', 'service:create'])]
     private ?Quotation $quotation = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
-    #[Groups(['service:read', 'service:create'])] 
+    #[Groups(['service:read', 'service:create'])]
     private ?Credit $credit = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['invoice:read','service:read', 'service:create'])] 
+    #[Assert\NotBlank(message:"Le taux de tva ne peut pas être vide.")]
+    #[Groups(['invoice:read', 'service:read', 'service:create'])]
     private ?float $vat = null;
 
     public function __construct()
