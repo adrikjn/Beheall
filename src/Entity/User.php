@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email(message: "L'email n'est pas valide.")]
     #[Assert\Length(
         min: 5,
-        max: 255,
+        max: 50,
         minMessage: "L'email doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'email ne peut pas dépasser {{ limit }} caractères."
     )]
