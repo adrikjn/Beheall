@@ -22,17 +22,17 @@ class Invoice
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['invoice:read', 'invoice:create','company:read'])] 
+    #[Groups(['invoice:read', 'invoice:create', 'company:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create'])]
     private ?Company $company = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['invoice:read', 'invoice:create','company:read'])] 
+    #[Groups(['invoice:read', 'invoice:create', 'company:read'])]
     private ?Customer $customer = null;
 
     #[ORM\Column(length: 255)]
@@ -46,70 +46,77 @@ class Invoice
         pattern: "/^[a-zA-Z0-9\s\-,.!]+$/",
         message: "L'objet ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des tirets, des points et des points d'exclamation."
     )]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company:read','invoice:read', 'invoice:create'])] 
+    #[Groups(['company:read', 'invoice:read', 'invoice:create'])]
     private ?string $billNumber = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create'])]
+    #[Assert\Date(message: "La date de début doit être une date valide.")]
     private ?\DateTimeInterface $fromDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['invoice:read', 'invoice:create'])]
     #[Assert\NotBlank(message: "La date de livraison est obligatoire.")]
-
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Assert\Date(message: "La date de livraison doit être une date valide.")]
+    #[Assert\GreaterThan(
+        propertyPath: 'fromDate',
+        message: "La date de livraison doit être postérieure à la date de début."
+    )]
     private ?\DateTimeInterface $deliveryDate = null;
 
     #[ORM\Column]
-    #[Groups(['invoice:read', 'invoice:create', 'company:read'])] 
+    #[Groups(['invoice:read', 'invoice:create', 'company:read'])]
     private ?float $totalPrice = null;
 
     #[ORM\Column]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create'])]
     private ?float $vat = null;
 
 
     #[ORM\Column(length: 255)]
-    #[Groups(['invoice:read', 'invoice:create','company:read'])] 
+    #[Groups(['invoice:read', 'invoice:create', 'company:read'])]
     private ?string $status = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create'])]
+    #[Assert\NotBlank(message: "Veuillez sélectionner une méthode de paiement.")]
     private ?string $paymentMethod = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create'])]
     private ?string $paymentDays = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create'])]
+    #[Assert\NotBlank(message: "Veuillez sélectionner une date de paiement limite.")]
     private ?\DateTimeInterface $paymentDateLimit = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['invoice:read','company:read'])] 
+    #[Groups(['invoice:read', 'company:read'])]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\OneToOne(inversedBy: 'invoice', cascade: ['persist', 'remove'])]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create'])]
     private ?Quotation $quotation = null;
 
     #[ORM\OneToOne(mappedBy: 'invoice', cascade: ['persist', 'remove'])]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create'])]
     private ?Credit $credit = null;
 
     #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: Services::class, orphanRemoval: true)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create'])]
     private Collection $services;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['invoice:read', 'invoice:create'])] 
+    #[Groups(['invoice:read', 'invoice:create'])]
     private ?string $billValidityDuration = null;
 
     public function __construct()
