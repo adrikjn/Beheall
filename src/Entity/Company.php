@@ -223,18 +223,17 @@ class Company
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(
-        max: 500,
+        max: 200,
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $descriptionWork = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    /*#[Assert\Length(
-        max: 5000,
+    #[Assert\Length(
+        max: 1000,
         maxMessage: "Les conditions générales de vente ne peuvent pas dépasser {{ limit }} caractères."
     )]
-    */
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $gcs = null;
 
