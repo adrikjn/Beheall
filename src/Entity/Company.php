@@ -100,127 +100,119 @@ class Company
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
-    /*
     #[Assert\NotBlank(message: "Le code postal ne peut pas être vide.")]
     #[Assert\Regex(
         pattern: "/^\d{5}$/",
         message: "Le code postal doit contenir exactement 5 chiffres."
-    )]  
-    */
+    )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $postalCode = null;
 
     #[ORM\Column(length: 255)]
-    /*
     #[Assert\NotBlank(message: "Le pays ne peut pas être vide.")]
     #[Assert\Length(
         min: 3,
-        max:40,
+        max: 40,
         minMessage: "Le pays doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le pays ne peut pas dépasser {{ limit }} caractères."
-    )]*/
+    )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $country = null;
 
     #[ORM\Column]
-    //#[Assert\NotBlank(message: "Le champ ne peut pas être vide.")]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?bool $billingIsDifferent = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    /*#[Assert\Length(
+    #[Assert\Length(
         max: 70,
         maxMessage: "L'adresse de facturation ne peut pas dépasser {{ limit }} caractères."
-    )]*/
+    )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $billingAddress = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    /*#[Assert\Length(
-        max: 30,
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z\s-]+$/",
+        message: "La ville ne peut contenir que des lettres, des espaces et des traits d'union."
+    )]
+    #[Assert\Length(
+        max: 40,
         maxMessage: "La ville de facturation ne peut pas dépasser {{ limit }} caractères."
-    )]*/
+    )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $billingCity = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    /*#[Assert\Regex(
+    #[Assert\Regex(
         pattern: "/^\d{5}$/",
         message: "Le code postal doit contenir exactement 5 chiffres."
-    )] */
+    )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $billingPostalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    /*#[Assert\Length(
-        max:40,
+    #[Assert\Length(
+        max: 40,
         maxMessage: "Le pays ne peut pas dépasser {{ limit }} caractères."
-    )]*/
+    )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $billingCountry = null;
 
     #[ORM\Column(length: 255)]
-    /*#[Assert\NotBlank(message: "Le numéro SIREN/SIRET ne peut pas être vide.")]
+    #[Assert\NotBlank(message: "Le numéro SIREN/SIRET ne peut pas être vide.")]
     #[Assert\Regex(
-        pattern: "/^[0-9]{9}|[0-9]{14}$/",
-        message: "Le numéro SIREN/SIRET ne peut contenir que des chiffres (9 ou 14 chiffres requis)."
-    )]*/
+        pattern: "/^\d{9}|\d{3}\s\d{3}\s\d{3}\s\d{5}$/",
+        message: "Le numéro SIREN doit comporter 9 chiffres et le numéro SIRET doit comporter 14 chiffres (avec des espaces pour la lisibilité)."
+    )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $sirenSiret = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    /*#[Assert\NotBlank(message: "Le numéro SIREN/SIRET ne peut pas être vide.")]
-    #[Assert\Length(
-        min: 5,
-        max: 70,
-        minMessage: "La forme juridique doit comporter au moins {{ limit }} caractères.",
-        maxMessage: "La forme juridique ne peut pas dépasser {{ limit }} caractères."
-    )]*/
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $legalForm = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    /*#[Assert\Length(
-        exactMessage: "Le numéro RM doit contenir exactement 10 chiffres.",
-        min: 10,
-        max: 10
-    )]*/
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
+    #[Assert\Regex(
+        pattern: "/^\d{9}[0-9A-Z]{5}$/i",
+        message: "Le numéro RM doit être composé de 9 chiffres suivis de 5 caractères alphanumériques."
+    )]
     private ?string $rmNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    /*#[Assert\Length(
-        exactly: 9,
-        exactMessage: "Le numéro RCS/RC doit contenir exactement {{ limit }} chiffres."
-    )]*/
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
+    #[Assert\Regex(
+        pattern: "/^[A-Z]{1}\d{6}[A-Z]{1}$/",
+        message: "Le numéro RCS doit être composé d'une lettre, suivi de 6 chiffres, suivi d'une lettre."
+    )]
     private ?string $rcsNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    /*
     #[Assert\Regex(
         pattern: '/^[0-9]+$/',
         message: 'Le capital social ne peut contenir que des chiffres.'
-    )]*/
+    )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $shareCapital = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    /*
     #[Assert\Length(
-        max: 30,
+        max: 40,
         maxMessage: "La ville de facturation ne peut pas dépasser {{ limit }} caractères."
     )]
-    */
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z\s-]+$/",
+        message: "La ville d'enregistrement ne peut contenir que des lettres, des espaces et des traits d'union."
+    )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $cityRegistration = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    /*
     #[Assert\Regex(
         pattern: '/^FR[0-9A-Z]{2}[0-9]{9}$/i',
         message: 'Le numéro de TVA intracommunautaire doit être au format FR12345678901.'
-    )]*/
+    )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $vatId = null;
 
