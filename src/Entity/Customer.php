@@ -193,6 +193,9 @@ class Customer
     #[Groups(['customer:read'])]
     private Collection $credits;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $vatId = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
@@ -472,6 +475,18 @@ class Customer
                 $credit->setCustomer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVatId(): ?string
+    {
+        return $this->vatId;
+    }
+
+    public function setVatId(?string $vatId): static
+    {
+        $this->vatId = $vatId;
 
         return $this;
     }
