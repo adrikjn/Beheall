@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email(message: "L'email n'est pas valide.")]
     #[Assert\Length(
         min: 5,
-        max: 70,
+        max: 255,
         minMessage: "L'email doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'email ne peut pas dépasser {{ limit }} caractères."
     )]
@@ -71,6 +71,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide.")]
+    #[Assert\Length(
+        max: 16,
+        maxMessage: "Le mot de passe ne doit pas dépasser {{ limit }} caractères."
+    )]
     #[Assert\Regex(
         pattern: "/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&,.])([A-Za-z\d@$!%*#?&,.]{8,})$/",
         message: "Le mot de passe doit contenir au moins 8 caractères avec au moins 1 chiffre et 1 caractère spécial."
@@ -82,9 +86,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: "Le nom ne peut pas être vide.")]
     #[Assert\Length(
         min: 2,
-        max: 40,
+        max: 50,
         minMessage: "Le nom doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
+    )]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z -]+$/',
+        message: "Le nom ne doit contenir que des lettres, des espaces et des traits d'union."
     )]
     #[Groups(['user:read', 'user:create'])]
     private ?string $lastName = null;
@@ -94,9 +102,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: "Le prénom ne peut pas être vide.")]
     #[Assert\Length(
         min: 2,
-        max: 40,
+        max: 50,
         minMessage: "Le prénom doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le prénom ne peut pas dépasser {{ limit }} caractères."
+    )]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z -]+$/',
+        message: "Le nom ne doit contenir que des lettres, des espaces et des traits d'union."
     )]
     private ?string $firstName = null;
 
