@@ -93,7 +93,7 @@ class Company
         maxMessage: "La ville ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern: "/^[a-zA-Z\s-]+$/",
+        pattern: "/^[a-zA-ZÀ-ÿ\s-]+$/u",
         message: "La ville ne peut contenir que des lettres, des espaces et des traits d'union."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
@@ -109,7 +109,6 @@ class Company
     private ?string $postalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\NotBlank(message: "Le pays ne peut pas être vide.")]
     #[Assert\Length(
         max: 40,
         maxMessage: "Le pays ne peut pas dépasser {{ limit }} caractères."
