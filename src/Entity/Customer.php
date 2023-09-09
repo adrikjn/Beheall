@@ -179,6 +179,7 @@ class Customer
         pattern: '/^FR[0-9A-Z]{2}[0-9]{9}$/i',
         message: 'Le numéro de TVA intracommunautaire doit être au format FR12345678901.'
     )]
+    #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $vatId = null;
 
     #[ORM\Column(length: 255, nullable: true)]
