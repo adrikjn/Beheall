@@ -217,15 +217,15 @@ class Company
     private ?string $vatId = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    //#[Assert\Url(message: "L'adresse du site web n'est pas une URL valide.")]
+    #[Assert\Url(message: "L'adresse du site web n'est pas une URL valide.")]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $website = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    /*#[Assert\Length(
+    #[Assert\Length(
         max: 500,
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
-    )]*/
+    )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $descriptionWork = null;
 
