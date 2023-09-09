@@ -108,12 +108,10 @@ class Company
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $postalCode = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Assert\NotBlank(message: "Le pays ne peut pas être vide.")]
     #[Assert\Length(
-        min: 3,
         max: 40,
-        minMessage: "Le pays doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le pays ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
@@ -334,7 +332,7 @@ class Company
         return $this->country;
     }
 
-    public function setCountry(string $country): static
+    public function setCountry(?string $country): static
     {
         $this->country = $country;
 
