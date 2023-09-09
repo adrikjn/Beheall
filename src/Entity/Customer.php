@@ -110,16 +110,6 @@ class Customer
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $address = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(
-        min: 8,
-        max: 70,
-        minMessage: "L'adresse doit comporter au moins {{ limit }} caractères.",
-        maxMessage: "L'adresse ne peut pas dépasser {{ limit }} caractères."
-    )]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
-    private ?string $addressLine2 = null;
-
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "La ville ne peut pas être vide.")]
     #[Assert\Length(
@@ -157,10 +147,6 @@ class Customer
     )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $country = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
-    private ?string $companyAddress = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(
@@ -304,18 +290,6 @@ class Customer
         return $this;
     }
 
-    public function getAddressLine2(): ?string
-    {
-        return $this->addressLine2;
-    }
-
-    public function setAddressLine2(?string $addressLine2): static
-    {
-        $this->addressLine2 = $addressLine2;
-
-        return $this;
-    }
-
     public function getCity(): ?string
     {
         return $this->city;
@@ -360,18 +334,6 @@ class Customer
     public function setCountry(string $country): static
     {
         $this->country = $country;
-
-        return $this;
-    }
-
-    public function getCompanyAddress(): ?string
-    {
-        return $this->companyAddress;
-    }
-
-    public function setCompanyAddress(?string $companyAddress): static
-    {
-        $this->companyAddress = $companyAddress;
 
         return $this;
     }

@@ -119,50 +119,6 @@ class Company
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $country = null;
 
-    #[ORM\Column]
-    #[Groups(['company:read', 'company:create', 'invoice:read'])]
-    private ?bool $billingIsDifferent = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(
-        min: 8,
-        max: 70,
-        minMessage: "L'adresse de facturation doit comporter au moins {{ limit }} caractères.",
-        maxMessage: "L'adresse de facturation ne peut pas dépasser {{ limit }} caractères."
-    )]
-    #[Groups(['company:read', 'company:create', 'invoice:read'])]
-    private ?string $billingAddress = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Regex(
-        pattern: "/^[a-zA-Z\s-]+$/",
-        message: "La ville de facturation ne peut contenir que des lettres, des espaces et des traits d'union."
-    )]
-    #[Assert\Length(
-        max: 40,
-        maxMessage: "La ville de facturation ne peut pas dépasser {{ limit }} caractères."
-    )]
-    #[Groups(['company:read', 'company:create', 'invoice:read'])]
-    private ?string $billingCity = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Regex(
-        pattern: "/^\d{5}$/",
-        message: "Le code postal de facturation doit contenir exactement 5 chiffres."
-    )]
-    #[Groups(['company:read', 'company:create', 'invoice:read'])]
-    private ?string $billingPostalCode = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(
-        min: 3,
-        minMessage: "Le pays de facturation doit comporter au moins {{ limit }} caractères.",
-        max: 40,
-        maxMessage: "Le pays de facturation ne peut pas dépasser {{ limit }} caractères."
-    )]
-    #[Groups(['company:read', 'company:create', 'invoice:read'])]
-    private ?string $billingCountry = null;
-
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le numéro SIREN/SIRET ne peut pas être vide.")]
     #[Assert\Regex(
@@ -385,66 +341,6 @@ class Company
     public function setCountry(string $country): static
     {
         $this->country = $country;
-
-        return $this;
-    }
-
-    public function isBillingIsDifferent(): ?bool
-    {
-        return $this->billingIsDifferent;
-    }
-
-    public function setBillingIsDifferent(bool $billingIsDifferent): static
-    {
-        $this->billingIsDifferent = $billingIsDifferent;
-
-        return $this;
-    }
-
-    public function getBillingAddress(): ?string
-    {
-        return $this->billingAddress;
-    }
-
-    public function setBillingAddress(?string $billingAddress): static
-    {
-        $this->billingAddress = $billingAddress;
-
-        return $this;
-    }
-
-    public function getBillingCity(): ?string
-    {
-        return $this->billingCity;
-    }
-
-    public function setBillingCity(?string $billingCity): static
-    {
-        $this->billingCity = $billingCity;
-
-        return $this;
-    }
-
-    public function getBillingPostalCode(): ?string
-    {
-        return $this->billingPostalCode;
-    }
-
-    public function setBillingPostalCode(?string $billingPostalCode): static
-    {
-        $this->billingPostalCode = $billingPostalCode;
-
-        return $this;
-    }
-
-    public function getBillingCountry(): ?string
-    {
-        return $this->billingCountry;
-    }
-
-    public function setBillingCountry(?string $billingCountry): static
-    {
-        $this->billingCountry = $billingCountry;
 
         return $this;
     }

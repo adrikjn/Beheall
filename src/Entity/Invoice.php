@@ -76,11 +76,6 @@ class Invoice
     #[Groups(['invoice:read', 'invoice:create', 'company:read'])]
     private ?float $totalPrice = null;
 
-    #[ORM\Column]
-    #[Groups(['invoice:read', 'invoice:create'])]
-    private ?float $vat = null;
-
-
     #[ORM\Column(length: 255)]
     #[Groups(['invoice:read', 'invoice:create', 'company:read'])]
     private ?string $status = null;
@@ -89,10 +84,6 @@ class Invoice
     #[Groups(['invoice:read', 'invoice:create'])]
     #[Assert\NotBlank(message: "Veuillez sélectionner une méthode de paiement.")]
     private ?string $paymentMethod = null;
-
-    #[ORM\Column(length: 255)]
-    #[Groups(['invoice:read', 'invoice:create'])]
-    private ?string $paymentDays = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['invoice:read', 'invoice:create'])]
@@ -226,18 +217,6 @@ class Invoice
         return $this;
     }
 
-    public function getVat(): ?float
-    {
-        return $this->vat;
-    }
-
-    public function setVat(float $vat): static
-    {
-        $this->vat = $vat;
-
-        return $this;
-    }
-
     public function getStatus(): ?string
     {
         return $this->status;
@@ -258,18 +237,6 @@ class Invoice
     public function setPaymentMethod(string $paymentMethod): static
     {
         $this->paymentMethod = $paymentMethod;
-
-        return $this;
-    }
-
-    public function getPaymentDays(): ?string
-    {
-        return $this->paymentDays;
-    }
-
-    public function setPaymentDays(string $paymentDays): static
-    {
-        $this->paymentDays = $paymentDays;
 
         return $this;
     }
