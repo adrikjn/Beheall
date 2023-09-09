@@ -108,7 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     #[Assert\Regex(
         pattern: '/^[a-zA-Z -]+$/',
-        message: "Le nom ne doit contenir que des lettres, des espaces et des traits d'union."
+        message: "Le prénom ne doit contenir que des lettres, des espaces et des traits d'union."
     )]
     private ?string $firstName = null;
 
