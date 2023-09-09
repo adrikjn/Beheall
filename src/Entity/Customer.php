@@ -171,7 +171,7 @@ class Customer
     #[Assert\Length(
         min: 10,
         max: 100,
-        minMessage:"La note doit comporter au moins {{ limit }} caractères.",
+        minMessage: "La note doit comporter au moins {{ limit }} caractères.",
         maxMessage: "La note ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
@@ -194,6 +194,10 @@ class Customer
     private Collection $credits;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Regex(
+        pattern: '/^FR[0-9A-Z]{2}[0-9]{9}$/i',
+        message: 'Le numéro de TVA intracommunautaire doit être au format FR12345678901.'
+    )]
     private ?string $vatId = null;
 
     public function __construct()
