@@ -62,9 +62,7 @@ class Customer
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(
-        min: 1,
         max: 40,
-        minMessage: "Le nom doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
@@ -74,7 +72,8 @@ class Customer
     #[Groups(['customer:read', 'customer:create', 'company:read', 'invoice:read'])]
     private ?string $companyName = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'email ne peut pas être vide.")]
     #[Assert\Email(message: "L'email n'est pas valide.")]
     #[Assert\Length(
         min: 5,
@@ -87,9 +86,7 @@ class Customer
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(
-        min: 1,
         max: 50,
-        minMessage: "L'activité commerciale doit comporter au moins {{ limit }} caractère.",
         maxMessage: "L'activité commerciale ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
@@ -137,7 +134,7 @@ class Customer
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $website = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Assert\NotBlank(message: "Le pays ne peut pas être vide.")]
     #[Assert\Length(
         min: 3,
@@ -150,16 +147,13 @@ class Customer
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(
-        min: 8,
         max: 70,
-        minMessage: "L'adresse de facturation doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'adresse de facturation ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $billingAddress = null;
 
-    #[ORM\Column(length: 255)]
-
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     #[Assert\Regex(
         pattern: "/^\+?[0-9]+$/",
@@ -169,9 +163,7 @@ class Customer
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(
-        min: 10,
         max: 100,
-        minMessage: "La note doit comporter au moins {{ limit }} caractères.",
         maxMessage: "La note ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
@@ -266,7 +258,7 @@ class Customer
         return $this->email;
     }
 
-    public function setEmail(?string $email): static
+    public function setEmail(string $email): static
     {
         $this->email = $email;
 
@@ -338,7 +330,7 @@ class Customer
         return $this->country;
     }
 
-    public function setCountry(string $country): static
+    public function setCountry(?string $country): static
     {
         $this->country = $country;
 
@@ -362,7 +354,7 @@ class Customer
         return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(string $phoneNumber): static
+    public function setPhoneNumber(?string $phoneNumber): static
     {
         $this->phoneNumber = $phoneNumber;
 
