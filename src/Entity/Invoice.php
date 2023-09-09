@@ -10,6 +10,7 @@ use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['invoice:read']],
@@ -35,6 +36,16 @@ class Invoice
     private ?Customer $customer = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 1,
+        max: 50,
+        minMessage: "L'objet doit comporter au moins {{ limit }} caractère.",
+        maxMessage: "L'objet ne peut pas dépasser {{ limit }} caractères."
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z0-9\s\-,.!]+$/",
+        message: "L'objet ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des tirets, des points et des points d'exclamation."
+    )]
     #[Groups(['invoice:read', 'invoice:create'])] 
     private ?string $title = null;
 
@@ -51,6 +62,8 @@ class Invoice
     private ?\DateTimeInterface $fromDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: "La date de livraison est obligatoire.")]
+
     #[Groups(['invoice:read', 'invoice:create'])] 
     private ?\DateTimeInterface $deliveryDate = null;
 
