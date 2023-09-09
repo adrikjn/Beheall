@@ -114,7 +114,7 @@ class Customer
         maxMessage: "La ville ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern: "/^[a-zA-Z\s-]+$/",
+        pattern: "/^[a-zA-ZÀ-ÿ\s-]+$/u",
         message: "La ville ne peut contenir que des lettres, des espaces et des traits d'union."
     )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
