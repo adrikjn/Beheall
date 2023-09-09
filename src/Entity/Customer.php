@@ -135,11 +135,8 @@ class Customer
     private ?string $website = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\NotBlank(message: "Le pays ne peut pas être vide.")]
     #[Assert\Length(
-        min: 3,
         max: 40,
-        minMessage: "Le pays doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le pays ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
