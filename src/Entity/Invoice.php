@@ -37,7 +37,7 @@ class Invoice
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(
-        min: 1,
+        min: 3,
         max: 50,
         minMessage: "L'objet doit comporter au moins {{ limit }} caractère.",
         maxMessage: "L'objet ne peut pas dépasser {{ limit }} caractères."
@@ -50,6 +50,10 @@ class Invoice
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+     #[Assert\Length(
+        max: 200,
+        maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
+    )]
     #[Groups(['invoice:read', 'invoice:create'])]
     private ?string $description = null;
 
@@ -63,7 +67,7 @@ class Invoice
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['invoice:read', 'invoice:create'])]
-    #[Assert\NotBlank(message: "La date de livraison est obligatoire.")]
+    #[Assert\NotBlank(message: "La date de réalisation du service ou de la livraison est obligatoire.")]
     #[Assert\GreaterThan(
         propertyPath: 'fromDate',
         message: "La date de livraison doit être postérieure à la date de début."
@@ -82,11 +86,6 @@ class Invoice
     #[Groups(['invoice:read', 'invoice:create'])]
     #[Assert\NotBlank(message: "Veuillez sélectionner une méthode de paiement.")]
     private ?string $paymentMethod = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['invoice:read', 'invoice:create'])]
-    #[Assert\NotBlank(message: "Veuillez sélectionner une date de paiement limite.")]
-    private ?\DateTimeInterface $paymentDateLimit = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['invoice:read', 'company:read'])]
@@ -235,17 +234,6 @@ class Invoice
     public function setPaymentMethod(string $paymentMethod): static
     {
         $this->paymentMethod = $paymentMethod;
-
-        return $this;
-    }
-    public function getPaymentDateLimit(): ?\DateTimeInterface
-    {
-        return $this->paymentDateLimit;
-    }
-
-    public function setPaymentDateLimit(\DateTimeInterface $paymentDateLimit): static
-    {
-        $this->paymentDateLimit = $paymentDateLimit;
 
         return $this;
     }
