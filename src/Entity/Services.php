@@ -42,9 +42,7 @@ class Services
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['invoice:read', 'service:read', 'service:create'])]
     #[Assert\Length(
-        min: 5,
-        max: 100,
-        minMessage:"La description doit comporter au moins {{ limit }} caractères.",
+        max: 50,
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
     )]
     private ?string $description = null;
