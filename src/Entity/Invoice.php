@@ -70,7 +70,7 @@ class Invoice
     #[Assert\NotBlank(message: "La date de réalisation du service ou de la livraison est obligatoire.")]
     #[Assert\GreaterThan(
         propertyPath: 'fromDate',
-        message: "La date de livraison doit être postérieure à la date de début."
+        message: "La date de réalisation du service ou de la livraison doit être postérieure à la date de début."
     )]
     private ?string $deliveryDate = null;
 
