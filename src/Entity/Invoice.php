@@ -61,18 +61,18 @@ class Invoice
     #[Groups(['company:read', 'invoice:read', 'invoice:create'])]
     private ?string $billNumber = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['invoice:read', 'invoice:create'])]
-    private ?\DateTimeInterface $fromDate = null;
+    private ?string $fromDate = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(length: 255)]
     #[Groups(['invoice:read', 'invoice:create'])]
     #[Assert\NotBlank(message: "La date de réalisation du service ou de la livraison est obligatoire.")]
     #[Assert\GreaterThan(
         propertyPath: 'fromDate',
         message: "La date de livraison doit être postérieure à la date de début."
     )]
-    private ?\DateTimeInterface $deliveryDate = null;
+    private ?string $deliveryDate = null;
 
     #[ORM\Column]
     #[Groups(['invoice:read', 'invoice:create', 'company:read'])]
@@ -105,6 +105,7 @@ class Invoice
 
     #[ORM\Column(length: 255)]
     #[Groups(['invoice:read', 'invoice:create'])]
+    #[Assert\NotBlank(message: "Veuillez sélectionner la durée de validité de la facture")]
     private ?string $billValidityDuration = null;
 
     public function __construct()
@@ -178,24 +179,24 @@ class Invoice
         return $this;
     }
 
-    public function getFromDate(): ?\DateTimeInterface
+    public function getFromDate(): ?string
     {
         return $this->fromDate;
     }
 
-    public function setFromDate(?\DateTimeInterface $fromDate): static
+    public function setFromDate(?string $fromDate): static
     {
         $this->fromDate = $fromDate;
 
         return $this;
     }
 
-    public function getDeliveryDate(): ?\DateTimeInterface
+    public function getDeliveryDate(): ?string
     {
         return $this->deliveryDate;
     }
 
-    public function setDeliveryDate(\DateTimeInterface $deliveryDate): static
+    public function setDeliveryDate(string $deliveryDate): static
     {
         $this->deliveryDate = $deliveryDate;
 
