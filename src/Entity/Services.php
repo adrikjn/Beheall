@@ -49,14 +49,14 @@ class Services
 
     #[ORM\Column]
     #[Groups(['invoice:read', 'service:read', 'service:create'])]
-    #[Assert\NotBlank(message:"La quantité/durée ne peut pas être vide.")]
-    #[Assert\GreaterThanOrEqual(value: 0, message:"La quantité/durée ne peut pas être négative.")]
+    #[Assert\NotBlank(message:"La quantité/durée journalier ne peut pas être vide.")]
+    #[Assert\GreaterThanOrEqual(value: 0, message:"La quantité/durée journalier ne peut pas être négative.")]
     private ?int $quantity = null;
 
     #[ORM\Column]
     #[Groups(['invoice:read', 'service:read', 'service:create'])]
-    #[Assert\NotBlank(message:"Le coût unitaire/horaire ne peut pas être vide.")]
-    #[Assert\GreaterThanOrEqual(value: 0, message:"Le coût unitaire/horaire ne peut pas être négatif.")]
+    #[Assert\NotBlank(message:"Le coût unitaire/journalier ne peut pas être vide.")]
+    #[Assert\GreaterThanOrEqual(value: 0, message:"Le coût unitaire/journalier ne peut pas être négatif.")]
     private ?float $unitCost = null;
 
     #[ORM\Column]
