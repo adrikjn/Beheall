@@ -83,8 +83,8 @@ class Services
     private ?Credit $credit = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\NotBlank(message:"Le taux de tva ne peut pas être vide.")]
     #[Groups(['invoice:read', 'service:read', 'service:create'])]
+    #[Assert\GreaterThanOrEqual(value: 0, message:"La TVA ne peut pas être négative.")]
     private ?float $vat = null;
 
     public function __construct()
