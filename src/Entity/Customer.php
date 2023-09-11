@@ -163,7 +163,7 @@ class Customer
         pattern: '/^FR[0-9A-Z]{2}[0-9]{9}$/i',
         message: 'Le numéro de TVA intracommunautaire doit être au format FR12345678901.'
     )]
-    #[Groups(['company:read', 'company:create', 'invoice:read'])]
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $vatId = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -171,7 +171,7 @@ class Customer
         pattern: "/^\d{9}|\d{3}\s\d{3}\s\d{3}\s\d{5}$/",
         message: "Le numéro SIREN doit comporter 9 chiffres et le numéro SIRET doit comporter 14 chiffres (avec des espaces pour la lisibilité)."
     )]
-    #[Groups(['company:read', 'company:create', 'invoice:read'])]
+    #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $sirenSiret = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
