@@ -68,7 +68,7 @@ class Invoice
     #[ORM\Column(length: 255)]
     #[Groups(['invoice:read', 'invoice:create'])]
     #[Assert\NotBlank(message: "La date de réalisation du service ou de la livraison est obligatoire.")]
-    #[Assert\GreaterThan(propertyPath:"fromDate", message:"La date de livraison ne peut pas être antérieure à la date de départ.")]
+    #[Assert\GreaterThan(propertyPath:"fromDate", message:"La date de livraison ne peut pas être antérieure ou égale à la date de départ.")]
     private ?string $deliveryDate = null;
 
     #[ORM\Column]
