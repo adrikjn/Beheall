@@ -40,8 +40,8 @@ class Company
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern: "/^[A-Za-z0-9\s\-,']+$/",
-        message: "Le nom de l'entreprise ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des tirets et des apostrophes."
+        pattern: "/^[A-Za-z0-9\s\-,éÉèÈàÀêÊëËôÔûÛçÇ']+$/",
+        message: "Le nom de l'entreprise ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des tirets, des apostrophes et des caractères accentués."
     )]
     #[Groups(['company:read', 'company:create', 'user:read', 'invoice:read'])]
     private ?string $name = null;
