@@ -68,6 +68,7 @@ class Invoice
     #[ORM\Column(length: 255)]
     #[Groups(['invoice:read', 'invoice:create'])]
     #[Assert\NotBlank(message: "La date de réalisation du service ou de la livraison est obligatoire.")]
+    #[Assert\GreaterThan(propertyPath:"fromDate", message:"La date de livraison ne peut pas être antérieure à la date de départ.")]
     private ?string $deliveryDate = null;
 
     #[ORM\Column]
@@ -103,6 +104,8 @@ class Invoice
     #[Groups(['invoice:read', 'invoice:create'])]
     #[Assert\NotBlank(message: "Veuillez sélectionner la durée de validité de la facture")]
     private ?string $billValidityDuration = null;
+
+    
 
     public function __construct()
     {
