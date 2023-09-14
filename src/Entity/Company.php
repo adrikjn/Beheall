@@ -186,14 +186,6 @@ class Company
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $descriptionWork = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Assert\Length(
-        max: 1000,
-        maxMessage: "Les conditions générales de vente ne peuvent pas dépasser {{ limit }} caractères."
-    )]
-    #[Groups(['company:read', 'company:create', 'invoice:read'])]
-    private ?string $gcs = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups("company:read", 'invoice:read')]
     private ?\DateTimeInterface $createdAt = null;
@@ -442,18 +434,6 @@ class Company
     public function setDescriptionWork(?string $descriptionWork): static
     {
         $this->descriptionWork = $descriptionWork;
-
-        return $this;
-    }
-
-    public function getGcs(): ?string
-    {
-        return $this->gcs;
-    }
-
-    public function setGcs(?string $gcs): static
-    {
-        $this->gcs = $gcs;
 
         return $this;
     }
