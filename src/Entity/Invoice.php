@@ -51,7 +51,7 @@ class Invoice
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
      #[Assert\Length(
-        max: 200,
+        max: 500,
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Groups(['invoice:read', 'invoice:create'])]

@@ -29,7 +29,7 @@ class Services
     #[Assert\NotBlank(message: "Le nom du produit/service ne peut pas être vide.")]
     #[Assert\Length(
         min : 1,
-        max : 255,
+        max : 30,
         minMessage : "Le nom du produit/service doit comporter au moins {{ limit }} caractère.",
         maxMessage : "Le nom du produit/service ne peut pas dépasser {{ limit }} caractères."
     )]
