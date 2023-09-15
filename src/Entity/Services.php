@@ -29,7 +29,7 @@ class Services
     #[Assert\NotBlank(message: "Le nom du produit/service ne peut pas être vide.")]
     #[Assert\Length(
         min : 1,
-        max : 30,
+        max : 40,
         minMessage : "Le nom du produit/service doit comporter au moins {{ limit }} caractère.",
         maxMessage : "Le nom du produit/service ne peut pas dépasser {{ limit }} caractères."
     )]
@@ -42,7 +42,7 @@ class Services
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['invoice:read', 'service:read', 'service:create'])]
     #[Assert\Length(
-        max: 50,
+        max: 40,
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
     )]
     private ?string $description = null;

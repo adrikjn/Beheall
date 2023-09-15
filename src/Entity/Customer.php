@@ -34,7 +34,7 @@ class Customer
     #[Assert\NotBlank(message: "Le nom ne peut pas être vide.")]
     #[Assert\Length(
         min: 2,
-        max: 50,
+        max: 40,
         minMessage: "Le nom doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
     )]
@@ -50,7 +50,7 @@ class Customer
     #[Assert\NotBlank(message: "Le prénom ne peut pas être vide.")]
     #[Assert\Length(
         min: 2,
-        max: 50,
+        max: 40,
         minMessage: "Le prénom doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le prénom ne peut pas dépasser {{ limit }} caractères."
     )]
@@ -77,7 +77,7 @@ class Customer
     #[Assert\Email(message: "L'email n'est pas valide.")]
     #[Assert\Length(
         min: 5,
-        max: 50,
+        max: 40,
         minMessage: "L'email doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'email ne peut pas dépasser {{ limit }} caractères."
     )]
@@ -86,7 +86,7 @@ class Customer
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(
-        max: 50,
+        max: 40,
         maxMessage: "L'activité commerciale ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
@@ -100,7 +100,7 @@ class Customer
     #[Assert\NotBlank(message: "L'adresse ne peut pas être vide.")]
     #[Assert\Length(
         min: 8,
-        max: 70,
+        max: 40,
         minMessage: "L'adresse doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'adresse ne peut pas dépasser {{ limit }} caractères."
     )]

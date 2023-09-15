@@ -38,7 +38,7 @@ class Invoice
     #[ORM\Column(length: 255)]
     #[Assert\Length(
         min: 3,
-        max: 50,
+        max: 40,
         minMessage: "L'objet doit comporter au moins {{ limit }} caractère.",
         maxMessage: "L'objet ne peut pas dépasser {{ limit }} caractères."
     )]

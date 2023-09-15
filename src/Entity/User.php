@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email(message: "L'email n'est pas valide.")]
     #[Assert\Length(
         min: 5,
-        max: 50,
+        max: 40,
         minMessage: "L'email doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'email ne peut pas dépasser {{ limit }} caractères."
     )]
@@ -86,7 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: "Le nom ne peut pas être vide.")]
     #[Assert\Length(
         min: 2,
-        max: 50,
+        max: 40,
         minMessage: "Le nom doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
     )]
@@ -102,7 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: "Le prénom ne peut pas être vide.")]
     #[Assert\Length(
         min: 2,
-        max: 50,
+        max: 40,
         minMessage: "Le prénom doit comporter au moins {{ limit }} caractères.",
         maxMessage: "Le prénom ne peut pas dépasser {{ limit }} caractères."
     )]
