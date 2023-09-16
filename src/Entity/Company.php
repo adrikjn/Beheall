@@ -117,10 +117,10 @@ class Company
     private ?string $country = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le numéro SIREN/SIRET ne peut pas être vide.")]
+    #[Assert\NotBlank(message: "Le numéro SIREN/SIRET/RCS/RM ne peut pas être vide.")]
     #[Assert\Regex(
-        pattern: "/^\d{9}|\d{3}\s\d{3}\s\d{3}\s\d{5}$/",
-        message: "Le numéro SIREN doit comporter 9 chiffres et le numéro SIRET doit comporter 14 chiffres (avec des espaces pour la lisibilité)."
+        pattern: "/^\d{9}|\d{3}\s\d{3}\s\d{3}\s\d{5}|[A-Z]{1}\d{6}[A-Z]{1}$/",
+        message: "Le numéro SIREN doit comporter 9 chiffres, le numéro SIRET doit comporter 14 chiffres (avec des espaces pour la lisibilité), le numéro RCS doit commencer par une lettre suivie de 6 chiffres et se terminer par une lettre, le numéro RM doit comporter 9 chiffres suivis de 5 caractères alphanumériques."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $sirenSiret = null;
@@ -128,22 +128,6 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $legalForm = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['company:read', 'company:create', 'invoice:read'])]
-    #[Assert\Regex(
-        pattern: "/^\d{9}[0-9A-Z]{5}$/i",
-        message: "Le numéro RM doit être composé de 9 chiffres suivis de 5 caractères alphanumériques."
-    )]
-    private ?string $rmNumber = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['company:read', 'company:create', 'invoice:read'])]
-    #[Assert\Regex(
-        pattern: "/^[A-Z]{1}\d{6}[A-Z]{1}$/",
-        message: "Le numéro RCS doit être composé d'une lettre, suivi de 6 chiffres, suivi d'une lettre."
-    )]
-    private ?string $rcsNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Regex(
@@ -350,30 +334,6 @@ class Company
     public function setLegalForm(?string $legalForm): static
     {
         $this->legalForm = $legalForm;
-
-        return $this;
-    }
-
-    public function getRmNumber(): ?string
-    {
-        return $this->rmNumber;
-    }
-
-    public function setRmNumber(?string $rmNumber): static
-    {
-        $this->rmNumber = $rmNumber;
-
-        return $this;
-    }
-
-    public function getRcsNumber(): ?string
-    {
-        return $this->rcsNumber;
-    }
-
-    public function setRcsNumber(?string $rcsNumber): static
-    {
-        $this->rcsNumber = $rcsNumber;
 
         return $this;
     }

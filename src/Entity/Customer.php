@@ -168,8 +168,8 @@ class Customer
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Regex(
-        pattern: "/^\d{9}|\d{3}\s\d{3}\s\d{3}\s\d{5}$/",
-        message: "Le numéro SIREN doit comporter 9 chiffres et le numéro SIRET doit comporter 14 chiffres (avec des espaces pour la lisibilité)."
+        pattern: "/^\d{9}|\d{3}\s\d{3}\s\d{3}\s\d{5}|[A-Z]{1}\d{6}[A-Z]{1}$/",
+        message: "Le numéro SIREN doit comporter 9 chiffres, le numéro SIRET doit comporter 14 chiffres (avec des espaces pour la lisibilité), le numéro RCS doit commencer par une lettre suivie de 6 chiffres et se terminer par une lettre, le numéro RM doit comporter 9 chiffres suivis de 5 caractères alphanumériques."
     )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $sirenSiret = null;
