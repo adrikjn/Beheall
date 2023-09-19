@@ -2,8 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
-use App\Controller\Admin\CompanyCrudController;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -28,7 +28,7 @@ class DashboardController extends AbstractDashboardController
         // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
         // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
 
-        $url = $this->adminUrlGenerator->setController(CompanyCrudController::class)->generateUrl();
+        $url = $this->adminUrlGenerator->setController(UserCrudController::class)->generateUrl();
 
         return $this->redirect($url);
     }
@@ -41,7 +41,10 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+        return [
+            MenuItem::linkToDashboard("BACKOFFICE", 'fa fa-home'),
+            MenuItem::section('Compte'),
+            MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class),
+        ];
     }
 }
