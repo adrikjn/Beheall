@@ -32,7 +32,7 @@ class UserCrudController extends AbstractCrudController
             EmailField::new('email')->onlyOnIndex(),
             EmailField::new('email')->onlyWhenCreating(),
             TextField::new('password', 'Mot de passe')->setFormType(PasswordType::class)->onlyWhenCreating(),
-
+            
             TextField::new('lastName', 'Nom')->onlyOnIndex(),
             TextField::new('lastName', 'Nom')->onlyWhenCreating(),
             TextField::new('firstName', 'Prénom')->onlyOnIndex(),
