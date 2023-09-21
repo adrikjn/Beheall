@@ -23,7 +23,7 @@ class RefreshTokenCrudController extends AbstractCrudController
             IdField::new('id')->onlyOnIndex(),
             TextField::new('refresh_token', 'Tokens de rafraîchissement')->onlyOnIndex(),
             TextField::new('username', 'email')->onlyOnIndex(),
-            DateTimeField::new('valid', "Dernière connexion le")->setFormat('d/M/Y à H:m:s')->hideOnForm(),
+            DateTimeField::new('valid', "Connexions")->setFormat('d/M/Y à H:m:s')->hideOnForm(),
         ];
     }
 
