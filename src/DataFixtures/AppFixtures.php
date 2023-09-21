@@ -62,23 +62,10 @@ class AppFixtures extends Fixture
             $company->setCity("Ville $i");
             $company->setPostalCode("12345");
             $company->setCountry("Pays $i");
-            $company->setBillingIsDifferent(rand(0, 1));
-            if ($company->isBillingIsDifferent()) {
-                $company->setBillingAddress("Adresse de facturation $i");
-                $company->setBillingCity("Ville de facturation $i");
-                $company->setBillingPostalCode("54321");
-                $company->setBillingCountry("Pays de facturation $i");
-            }
+           
             $company->setSirenSiret("123456789");
             $randomField = rand(1, 3);
-            if ($randomField === 1) {
-                $randomLegalForm = $legalForms[array_rand($legalForms)];
-                $company->setLegalForm("$randomLegalForm");
-            } elseif ($randomField === 2) {
-                $company->setRmNumber("RM$i");
-            } else {
-                $company->setRcsNumber("RCS$i");
-            }
+           
             if ($randomField === 1) {
                 $company->setShareCapital((string)rand(0, 10000));
             }
@@ -92,9 +79,7 @@ class AppFixtures extends Fixture
             if ($randomField === 1) {
                 $company->setDescriptionWork("Description des travaux $i");
             }
-            if ($randomField === 1) {
-                $company->setGcs("Conditions générales de vente $i");
-            }
+           
             $company->setCreatedAt(new \DateTime());
             $manager->persist($company);
         }
@@ -107,15 +92,13 @@ class AppFixtures extends Fixture
             $customer->setCompany($companies[array_rand($companies)]);
             $customer->setLastName("Nom$i");
             $customer->setFirstName("Prénom$i");
+            $customer->setEmail("contact$i@example.com");
 
             // Remplir email, activity, addressLine2, website, billingAddress et notes une fois sur deux
             if ($i % 2 === 0) {
                 $customer->setCompanyName("Company $i");
-                $customer->setEmail("contact$i@example.com");
                 $customer->setActivity("Activité $i");
-                $customer->setAddressLine2("Adresse ligne 2 $i");
                 $customer->setWebsite("https://www.example$i.com");
-                $customer->setBillingAddress("Adresse de facturation $i");
                 $customer->setNotes("Notes $i");
             }
 
@@ -123,7 +106,6 @@ class AppFixtures extends Fixture
             $customer->setCity("Ville $i");
             $customer->setPostalCode("12345");
             $customer->setCountry("Pays $i");
-            $customer->setCompanyAddress("Adresse de l'entreprise $i");
             $customer->setPhoneNumber("123456789$i");
             $customer->setCreatedAt(new \DateTime());
 
@@ -156,8 +138,8 @@ class AppFixtures extends Fixture
                 $quotation->setTitle("Devis");
                 $quotation->setDescription("Description du devis ");
                 $quotation->setQuoteNumber("Q-" . uniqid());
+                $quotation->setDeliveryDate("new \DateTime()");
                 $quotation->setFromDate(new \DateTime());
-                $quotation->setDeliveryDate(new \DateTime());
                 $quotation->setTotalPrice(rand(1, 1000000));
                 $quotation->setVat(20);
                 $quotation->setDeposit(rand(50, 200));
@@ -188,20 +170,14 @@ class AppFixtures extends Fixture
                 $invoice->setTitle("Facture $i");
                 $invoice->setDescription("Description de la facture $i");
                 $invoice->setBillNumber("BILL-00$i");
-                $invoice->setFromDate(new \DateTime());
-                $invoice->setDeliveryDate(new \DateTime());
                 $invoice->setTotalPrice(rand(1, 1000000));
-                $invoice->setVat(20);
         
                 $invoice->setBillValidityDuration("30 jours");
         
                 $invoice->setStatus($statusOptions[$randomStatusIndex]);
                 $invoice->setPaymentMethod($randomPaymentMethod);
-                $invoice->setPaymentDays("30 jours");
                 $paymentDateLimit = new \DateTime();
-                $paymentDateLimit->add(new \DateInterval('P15D'));
-                $invoice->setPaymentDateLimit($paymentDateLimit);
-        
+                $paymentDateLimit->add(new \DateInterval('P15D'));        
                 $invoice->setCreatedAt(new \DateTime());
                 $invoice->setQuotation($quotation);
         
