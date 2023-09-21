@@ -32,7 +32,7 @@ class UserCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             EmailField::new('email')->onlyOnIndex(),
             EmailField::new('email')->onlyWhenCreating(),
-            TextField::new('plainPassword', 'Mot de passe*') // Ajoutez l'astérisque ici
+            TextField::new('plainPassword', 'Mot de passe*')
                 ->setFormType(PasswordType::class)
                 ->onlyWhenCreating(),
             TextField::new('lastName', 'Nom')->onlyOnIndex(),
@@ -46,10 +46,17 @@ class UserCrudController extends AbstractCrudController
             CollectionField::new('companies', 'Entreprises')
                 ->onlyOnIndex()
                 ->formatValue(function ($value, $entity) {
+                    $companies = $entity->getCompanies();
+        
+                    if ($companies->isEmpty()) {
+                        return 'x'; 
+                    }
+        
                     $companyIds = [];
-                    foreach ($entity->getCompanies() as $company) {
+                    foreach ($companies as $company) {
                         $companyIds[] = $company->getId();
                     }
+        
                     return implode(', ', $companyIds);
                 }),
         ];
