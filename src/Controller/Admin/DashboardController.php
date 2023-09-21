@@ -22,7 +22,7 @@ class DashboardController extends AbstractDashboardController
     {
     }
 
-    #[Route('/admin', name: 'admin')]
+    #[Route('/admin-dashboard', name: 'admin')]
     public function index(): Response
     {
         // return parent::index();
@@ -56,7 +56,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Produits/Services', 'fab fa-product-hunt', Services::class),
             MenuItem::linkToCrud('Factures', 'fas fa-file-invoice', Invoice::class),
             MenuItem::section('Retour au site'),
-            MenuItem::linkToUrl('Beheall', 'fas fa-external-link-alt', 'https://www.example.com')
+            MenuItem::linkToUrl('Beheall', 'fas fa-external-link-alt', 'https://www.beheall.com')
         ];
     }
 }
