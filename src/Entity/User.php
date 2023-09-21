@@ -12,17 +12,18 @@ use ApiPlatform\Metadata\Delete;
 use Doctrine\ORM\Mapping as ORM;
 use App\State\UserPasswordHasher;
 use App\Repository\UserRepository;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ApiResource(
     operations: [
@@ -70,7 +71,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide.")]
     #[Assert\Length(
         max: 16,
         maxMessage: "Le mot de passe ne doit pas dépasser {{ limit }} caractères."
@@ -79,7 +79,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         pattern: "/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&,.])([A-Za-z\d@$!%*#?&,.]{8,})$/",
         message: "Le mot de passe doit contenir au moins 8 caractères avec au moins 1 chiffre et 1 caractère spécial."
     )]
-    #[Groups(['user:create', 'user:update'])]
+    #[Groups(['user:create'])]
     private ?string $plainPassword = null;
 
     #[ORM\Column(length: 255)]
@@ -213,6 +213,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->plainPassword = $plainPassword;
         return $this;
     }
+
 
 
     /**

@@ -32,8 +32,9 @@ class UserCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             EmailField::new('email')->onlyOnIndex(),
             EmailField::new('email')->onlyWhenCreating(),
-            TextField::new('password', 'Mot de passe')->setFormType(PasswordType::class)->onlyWhenCreating(),
-
+            TextField::new('plainPassword', 'Mot de passe*') // Ajoutez l'astérisque ici
+                ->setFormType(PasswordType::class)
+                ->onlyWhenCreating(),
             TextField::new('lastName', 'Nom')->onlyOnIndex(),
             TextField::new('lastName', 'Nom')->onlyWhenCreating(),
             TextField::new('firstName', 'Prénom')->onlyOnIndex(),
@@ -60,7 +61,7 @@ class UserCrudController extends AbstractCrudController
             $entityInstance->setPassword(
                 $this->hasher->hashPassword(
                     $entityInstance,
-                    $entityInstance->getPassword()
+                    $entityInstance->getPlainPassword() // Utilisez getPlainPassword()
                 )
             );
         }
