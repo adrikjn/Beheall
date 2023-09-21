@@ -45,15 +45,10 @@ class UserCrudController extends AbstractCrudController
             CollectionField::new('companies', 'Entreprises')
                 ->onlyOnIndex()
                 ->formatValue(function ($value, $entity) {
-                    // Créez un tableau pour stocker les IDs des entreprises
                     $companyIds = [];
-
-                    // Parcourez les entreprises associées à l'utilisateur
                     foreach ($entity->getCompanies() as $company) {
                         $companyIds[] = $company->getId();
                     }
-
-                    // Retournez les IDs sous forme de chaîne de caractères séparée par des virgules
                     return implode(', ', $companyIds);
                 }),
         ];
