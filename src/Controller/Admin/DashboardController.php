@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Company;
 use App\Entity\Customer;
 use App\Entity\Invoice;
+use App\Entity\RefreshToken;
 use App\Entity\Services;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,6 +50,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToDashboard("BACKOFFICE", 'fa fa-home'),
             MenuItem::section('Comptes'),
             MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class),
+            MenuItem::linkToCrud('Dernière connexion', 'fas fa-hand-paper', RefreshToken::class),
             MenuItem::section('Entités'),
             MenuItem::linkToCrud('Entreprises', 'fas fa-building', Company::class),
             MenuItem::linkToCrud('Clients', 'fas fa-share', Customer::class),
