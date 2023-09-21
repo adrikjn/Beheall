@@ -37,11 +37,12 @@ class DashboardController extends AbstractDashboardController
 
         return $this->redirect($url);
     }
+    
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Beheall');
+            ->setTitle('Beheall Admin');
     }
 
     public function configureMenuItems(): iterable
