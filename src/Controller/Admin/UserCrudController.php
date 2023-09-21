@@ -39,7 +39,6 @@ class UserCrudController extends AbstractCrudController
             TextField::new('lastName', 'Nom')->onlyOnIndex(),
             TextField::new('lastName', 'Nom')->onlyWhenCreating(),
             TextField::new('firstName', 'Prénom')->onlyOnIndex(),
-            TextField::new('firstName', 'Prénom')->onlyWhenCreating(),
             TextField::new('phoneNumber', 'Numéro de téléphone')->onlyOnIndex(),
             TextField::new('phoneNumber', 'Numéro de téléphone')->onlyWhenCreating(),
             DateTimeField::new('createdAt', "Créer le")->setFormat('d/M/Y à H:m:s')->hideOnForm(),
@@ -50,7 +49,7 @@ class UserCrudController extends AbstractCrudController
                     $companies = $entity->getCompanies();
         
                     if ($companies->isEmpty()) {
-                        return 'x'; 
+                        return ''; 
                     }
         
                     $companyIds = [];

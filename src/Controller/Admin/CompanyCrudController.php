@@ -47,9 +47,9 @@ class CompanyCrudController extends AbstractCrudController
                 return implode(', ', $invoiceIds);
             }),
             TextField::new('name', 'Nom d\'entreprise')->onlyOnIndex(),
-            TextField::new('address', 'Adresse')->onlyOnIndex(),
             EmailField::new('email', 'Email')->onlyOnIndex(),
             TextField::new('phoneNumber', 'Numéro de téléphone')->onlyOnIndex(),
+            TextField::new('address', 'Adresse')->onlyOnIndex(),
             TextField::new('city', 'Ville')->onlyOnIndex(),
             TextField::new('postalCode', 'Code postal')->onlyOnIndex(),
             TextField::new('sirenSiret', 'SIREN/SIRET/RCS/RM')->onlyOnIndex(),
