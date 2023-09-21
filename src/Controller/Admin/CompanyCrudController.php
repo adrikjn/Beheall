@@ -3,13 +3,15 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Company;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class CompanyCrudController extends AbstractCrudController
 {
@@ -23,9 +25,9 @@ class CompanyCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
-            AssociationField::new('user')->onlyOnIndex(),
+            AssociationField::new('user')->setLabel('ID utilisateur')->onlyOnIndex(),
             AssociationField::new('customers')
-            ->setLabel('IDs des Clients')
+            ->setLabel('IDs Clients')
             ->onlyOnIndex()
             ->formatValue(function ($value, $entity) {
                 $customerIds = [];
@@ -35,7 +37,7 @@ class CompanyCrudController extends AbstractCrudController
                 return implode(', ', $customerIds);
             }),
         AssociationField::new('invoices')
-            ->setLabel('IDs des Factures')
+            ->setLabel('IDs Factures')
             ->onlyOnIndex()
             ->formatValue(function ($value, $entity) {
                 $invoiceIds = [];
@@ -44,10 +46,6 @@ class CompanyCrudController extends AbstractCrudController
                 }
                 return implode(', ', $invoiceIds);
             }),
-            // CollectionField::new('user', 'Utilisateur associé')
-            //     ->formatValue(function ($value, $entity) {
-            //         return $value ? $value->getId() : ''; // Affiche l'ID de l'utilisateur ou une chaîne vide si le champ est vide
-            //     }),
             TextField::new('name', 'Nom d\'entreprise')->onlyOnIndex(),
             TextField::new('address', 'Adresse')->onlyOnIndex(),
             EmailField::new('email', 'Email')->onlyOnIndex(),
@@ -64,5 +62,11 @@ class CompanyCrudController extends AbstractCrudController
             DateTimeField::new('createdAt', "Créer le")->setFormat('d/M/Y à H:m:s')->onlyOnIndex(),
             
         ];
+    }
+    public function configureActions(Actions $actions): Actions
+    {
+        $actions->disable(Action::NEW);
+        $actions->disable(Action::EDIT);
+        return $actions;
     }
 }
