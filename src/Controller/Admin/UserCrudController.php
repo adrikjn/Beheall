@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserCrudController extends AbstractCrudController
@@ -43,7 +44,7 @@ class UserCrudController extends AbstractCrudController
             TextField::new('phoneNumber', 'Numéro de téléphone')->onlyWhenCreating(),
             DateTimeField::new('createdAt', "Créer le")->setFormat('d/M/Y à H:m:s')->hideOnForm(),
             CollectionField::new('roles')->setTemplatePath('admin/field/roles.html.twig'),
-            CollectionField::new('companies', 'Entreprises')
+            AssociationField::new('companies', 'Entreprises')
                 ->onlyOnIndex()
                 ->formatValue(function ($value, $entity) {
                     $companies = $entity->getCompanies();
