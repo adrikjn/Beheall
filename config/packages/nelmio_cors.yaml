@@ -12,8 +12,3 @@ nelmio_cors:
             allow_methods: ['POST']
             allow_headers: ['Content-Type']
             max_age: 3600
-        '^/api/login_check':
-            allow_origin: ['https://www.beheall.com']
-            allow_methods: ['POST']
-            allow_headers: ['Content-Type']
-            max_age: 3600
