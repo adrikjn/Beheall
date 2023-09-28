@@ -46,10 +46,6 @@ class Company
     #[Groups(['company:read', 'company:create', 'user:read', 'invoice:read'])]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['company:read', 'company:create', 'invoice:read'])]
-    private ?string $logo = null;
-
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "L'adresse ne peut pas être vide.")]
     #[Assert\Length(
@@ -230,17 +226,6 @@ class Company
         return $this;
     }
 
-    public function getLogo(): ?string
-    {
-        return $this->logo;
-    }
-
-    public function setLogo(?string $logo): static
-    {
-        $this->logo = $logo;
-
-        return $this;
-    }
 
     public function getAddress(): ?string
     {
