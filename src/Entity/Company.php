@@ -226,7 +226,6 @@ class Company
         return $this;
     }
 
-
     public function getAddress(): ?string
     {
         return $this->address;
