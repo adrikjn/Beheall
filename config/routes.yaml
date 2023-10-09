@@ -10,3 +10,13 @@ api_login_check:
 
 api_refresh_token:
     path: /api/token/refresh
+
+reset_password:
+    path: '/reset-password'
+    controller: App\Controller\ResetPasswordController::resetPassword
+    methods: ['POST']
+
+# config/routes.yaml
+reset_password_confirm:
+    path: '/reset-password/confirm/{token}'
+    controller: App\Controller\ResetPasswordController::confirmResetPassword
