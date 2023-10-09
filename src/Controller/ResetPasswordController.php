@@ -13,17 +13,18 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class ResetPasswordController extends AbstractController
 {
     /**
- * @Route("/reset-password/confirm/{token}", name="reset_password_confirm")
- */
-public function confirmResetPassword(string $token): Response
-{
-    // Vérifiez le jeton et effectuez la réinitialisation du mot de passe ici.
-    // Vous pouvez également afficher un formulaire de réinitialisation de mot de passe.
+     * @Route("/reset-password/confirm/{token}", name="reset_password_confirm")
+     */
+    public function confirmResetPassword(string $token): Response
+    {
+        // Vérifiez le jeton et effectuez la réinitialisation du mot de passe ici.
+        // Vous pouvez également afficher un formulaire de réinitialisation de mot de passe.
 
-    return $this->render('reset_password/confirm.html.twig', [
-        'token' => $token,
-    ]);
-}
+        return $this->render('reset_password/confirm.html.twig', [
+            'token' => $token,
+        ]);
+    }
+
     /**
      * @Route("/reset-password", name="reset_password", methods={"POST"})
      */
@@ -38,8 +39,9 @@ public function confirmResetPassword(string $token): Response
         // Envoyez un e-mail à l'utilisateur avec le lien de réinitialisation
         $resetUrl = $this->generateUrl('reset_password_confirm', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
+        // Utilisez SendinBlue pour envoyer l'e-mail
         $email = (new Email())
-            ->from('beheallpro@outlook.com')
+            ->from('beheallpro@gmail.com') // Mettez votre adresse e-mail d'expéditeur
             ->to($email)
             ->subject('Réinitialisation de mot de passe')
             ->html(

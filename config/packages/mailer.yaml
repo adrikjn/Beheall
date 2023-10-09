@@ -1,5 +1,5 @@
 framework:
     mailer:
-        dsn: 'smtp://beheallpro@outlook.com:%env(MAILER_PASSWORD)%@smtp-mail.outlook.com:587'
+        dsn: '%env(MAILER_DSN)%'
 
-
+# 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
