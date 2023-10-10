@@ -2,16 +2,27 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mime\Email;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+
 
 class ResetPasswordController extends AbstractController
 {
+    private $entityManager; // Déclarez une propriété privée pour l'EntityManager
+
+    public function __construct(EntityManagerInterface $entityManager) // Injectez l'EntityManager
+    {
+        $this->entityManager = $entityManager;
+    }
     /**
      * @Route("/reset-password/confirm/{token}", name="reset_password_confirm")
      */
@@ -54,5 +65,28 @@ class ResetPasswordController extends AbstractController
         $mailer->send($email);
 
         return new Response('E-mail de réinitialisation envoyé avec succès !');
+    }
+    public function generateResetToken(Request $request, UserRepository $userRepository, TokenGeneratorInterface $tokenGenerator): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $email = $data['email'];
+
+        // Recherchez l'utilisateur par son email
+        $user = $userRepository->findOneBy(['email' => $email]);
+
+        if (!$user) {
+            return new JsonResponse(['message' => 'Utilisateur non trouvé.'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Générez un jeton unique pour réinitialiser le mot de passe
+        $token = $tokenGenerator->generateToken();
+
+        // Stockez le token dans l'entité User
+        $user->setResetPasswordToken($token);
+
+        // Enregistrez les modifications dans la base de données en utilisant l'EntityManager
+        $this->entityManager->flush();
+
+        return new JsonResponse(['message' => 'Token de réinitialisation généré avec succès.']);
     }
 }
