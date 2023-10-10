@@ -137,6 +137,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups("user:read")]
     private Collection $companies;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    // #[Groups(["user:read", "user:create"])]
+    private ?string $resetPasswordToken = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
@@ -299,6 +303,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $company->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getResetPasswordToken(): ?string
+    {
+        return $this->resetPasswordToken;
+    }
+
+    public function setResetPasswordToken(?string $resetPasswordToken): static
+    {
+        $this->resetPasswordToken = $resetPasswordToken;
 
         return $this;
     }
