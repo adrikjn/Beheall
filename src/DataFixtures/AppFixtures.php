@@ -55,7 +55,6 @@ class AppFixtures extends Fixture
             $company = new Company();
             $company->setUser($users[array_rand($users)]);
             $company->setName("Entreprise $i");
-            $company->setLogo("logo_$i.png");
             $company->setAddress("Adresse $i");
             $company->setEmail("contact$i@example.com");
             $company->setPhoneNumber("123456789$i");
@@ -138,7 +137,7 @@ class AppFixtures extends Fixture
                 $quotation->setTitle("Devis");
                 $quotation->setDescription("Description du devis ");
                 $quotation->setQuoteNumber("Q-" . uniqid());
-                $quotation->setDeliveryDate("new \DateTime()");
+                $quotation->setDeliveryDate(new \DateTime());
                 $quotation->setFromDate(new \DateTime());
                 $quotation->setTotalPrice(rand(1, 1000000));
                 $quotation->setVat(20);
