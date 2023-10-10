@@ -16,7 +16,6 @@ reset_password:
     controller: App\Controller\ResetPasswordController::resetPassword
     methods: ['POST']
 
-# config/routes.yaml
 reset_password_confirm:
     path: '/reset-password/confirm/{token}'
     controller: App\Controller\ResetPasswordController::confirmResetPassword
