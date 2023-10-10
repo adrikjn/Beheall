@@ -1,10 +1,13 @@
-{# templates/emails/reset_password.html.twig #}
-
 <!DOCTYPE html>
 <html>
+<head>
+    <title>Réinitialisation de mot de passe</title>
+</head>
 <body>
     <h1>Réinitialisation de mot de passe</h1>
-    <p>Cliquez sur le lien ci-dessous pour réinitialiser votre mot de passe :</p>
+    <p>Bonjour,</p>
+    <p>Nous avons reçu une demande de réinitialisation de mot de passe pour votre compte. Si vous n'avez pas effectué cette demande, vous pouvez ignorer cet e-mail.</p>
+    <p>Pour réinitialiser votre mot de passe, cliquez sur le lien ci-dessous :</p>
     <a href="{{ resetUrl }}">Réinitialiser le mot de passe</a>
 </body>
 </html>

@@ -1,0 +1,26 @@
+{# templates/reset_password/confirm.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation de réinitialisation du mot de passe{% endblock %}
+
+{% block body %}
+    <h1>Confirmation de réinitialisation du mot de passe</h1>
+
+    {% if token %}
+        <p>Veuillez utiliser le formulaire ci-dessous pour réinitialiser votre mot de passe :</p>
+        <form method="post" action="{{ path('reset_password_confirm', {'token': token}) }}">
+            <div>
+                <label for="password">Nouveau mot de passe :</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div>
+                <label for="confirm_password">Confirmez le nouveau mot de passe :</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <button type="submit">Réinitialiser le mot de passe</button>
+        </form>
+    {% else %}
+        <p>Le lien de réinitialisation du mot de passe est invalide ou a expiré.</p>
+    {% endif %}
+{% endblock %}

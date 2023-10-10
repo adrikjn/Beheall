@@ -41,7 +41,7 @@ class ResetPasswordController extends AbstractController
 
         // Utilisez SendinBlue pour envoyer l'e-mail
         $email = (new Email())
-            ->from('beheallpro@gmail.com') // Mettez votre adresse e-mail d'expéditeur
+            ->from('beheallpro@outlook.com') // Mettez votre adresse e-mail d'expéditeur
             ->to($email)
             ->subject('Réinitialisation de mot de passe')
             ->html(
