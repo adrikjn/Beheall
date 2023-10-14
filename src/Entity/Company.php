@@ -66,7 +66,7 @@ class Company
         minMessage: "L'email doit comporter au moins {{ limit }} caractères.",
         maxMessage: "L'email ne peut pas dépasser {{ limit }} caractères."
     )]
-    #[Groups(['company:read', 'company:create', 'invoice:read'])]
+    #[Groups(['company:read', 'company:create', 'invoice:read', 'user:read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -179,7 +179,7 @@ class Company
     private Collection $quotations;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Invoice::class, orphanRemoval: true)]
-    #[Groups("company:read")]
+    #[Groups("company:read", 'user:read')]
     private Collection $invoices;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Credit::class, orphanRemoval: true)]

@@ -47,8 +47,8 @@ class AppFixtures extends Fixture
             $user->setCreatedAt(new \DateTime());
             $manager->persist($user);
         }
-        $manager->flush();    
-        
+        $manager->flush();
+
         $users = $manager->getRepository(User::class)->findAll();
         $legalForms = ["EI", "EURL", "SARL", "SNC", "SAS", "SA"];
         for ($i = 1; $i <= 70; $i++) {
@@ -61,14 +61,14 @@ class AppFixtures extends Fixture
             $company->setCity("Ville $i");
             $company->setPostalCode("12345");
             $company->setCountry("Pays $i");
-           
+
             $company->setSirenSiret("123456789");
             $randomField = rand(1, 3);
-           
+
             if ($randomField === 1) {
                 $company->setShareCapital((string)rand(0, 10000));
             }
-            if($randomField === 1){
+            if ($randomField === 1) {
                 $company->setCityRegistration("Ville d'enregistrement $i");
             }
             $company->setVatId("FR12345678901");
@@ -78,7 +78,7 @@ class AppFixtures extends Fixture
             if ($randomField === 1) {
                 $company->setDescriptionWork("Description des travaux $i");
             }
-           
+
             $company->setCreatedAt(new \DateTime());
             $manager->persist($company);
         }
@@ -125,95 +125,96 @@ class AppFixtures extends Fixture
             'Espèces',
             'Chèque-cadeau',
             'Financement ou crédit',
-        ];     
+        ];
         foreach ($companies as $company) {
             $customersInCompany = $manager->getRepository(Customer::class)->findBy(['company' => $company]);
-            if(!empty($customersInCompany)) {
-            for ($i = 1; $i <= 5; $i++) {
-                $quotation = new Quotation();
-                $quotation->setCompany($company); 
-                $customer = $customersInCompany[array_rand($customersInCompany)];
-                $quotation->setCustomer($customer);
-                $quotation->setTitle("Devis");
-                $quotation->setDescription("Description du devis ");
-                $quotation->setQuoteNumber("Q-" . uniqid());
-                $quotation->setDeliveryDate(new \DateTime());
-                $quotation->setFromDate(new \DateTime());
-                $quotation->setTotalPrice(rand(1, 1000000));
-                $quotation->setVat(20);
-                $quotation->setDeposit(rand(50, 200));
-                $quotation->setDepositDate(new \DateTime());
-        
-                $randomValidityDays = $validityDaysOptions[array_rand($validityDaysOptions)];
-                $validityDuration = new \DateTime();
-                $validityDuration->add(new \DateInterval("P{$randomValidityDays}D"));
-                $quotation->setQuoteValidityDuration($validityDuration);
-        
-                $randomPaymentMethod = $paymentMethods[array_rand($paymentMethods)];
-                $quotation->setPaymentMethod($randomPaymentMethod);
-        
-                $quotation->setQuoteValidityDuration(new \DateTime());
-                $quotation->setPaymentDateLimit(new \DateTime());
-        
-                $quotation->setPaymentDays("30 jours");
-                $randomStatusIndex = array_rand($statusOptions);
-                $quotation->setStatus($statusOptions[$randomStatusIndex]);
-                $quotation->setCreatedAt(new \DateTime());
-        
-                $manager->persist($quotation);
-        
+            if (!empty($customersInCompany)) {
+                for ($i = 1; $i <= 5; $i++) {
+                    $quotation = new Quotation();
+                    $quotation->setCompany($company);
+                    $customer = $customersInCompany[array_rand($customersInCompany)];
+                    $quotation->setCustomer($customer);
+                    $quotation->setTitle("Devis");
+                    $quotation->setDescription("Description du devis ");
+                    $quotation->setQuoteNumber("Q-" . uniqid());
+                    $deliveryDate = new \DateTime('2023-10-14'); // Instancie un objet DateTime à partir de la chaîne de date
+                    $quotation->setDeliveryDate($deliveryDate); // Passer l'objet DateTime à la méthode setDeliveryDate
+                    $quotation->setFromDate(new \DateTime());
+                    $quotation->setTotalPrice(rand(1, 1000000));
+                    $quotation->setVat(20);
+                    $quotation->setDeposit(rand(50, 200));
+                    $quotation->setDepositDate(new \DateTime());
 
-                $invoice = new Invoice();
-                $invoice->setCompany($company);
-                $invoice->setCustomer($customer);
-                $invoice->setTitle("Facture $i");
-                $invoice->setDescription("Description de la facture $i");
-                $invoice->setBillNumber("BILL-00$i");
-                $invoice->setTotalPrice(rand(1, 1000000));
-        
-                $invoice->setBillValidityDuration("30 jours");
-        
-                $invoice->setStatus($statusOptions[$randomStatusIndex]);
-                $invoice->setPaymentMethod($randomPaymentMethod);
-                $paymentDateLimit = new \DateTime();
-                $paymentDateLimit->add(new \DateInterval('P15D'));        
-                $invoice->setCreatedAt(new \DateTime());
-                $invoice->setQuotation($quotation);
-        
-                $manager->persist($invoice);
+                    $randomValidityDays = $validityDaysOptions[array_rand($validityDaysOptions)];
+                    $validityDuration = new \DateTime();
+                    $validityDuration->add(new \DateInterval("P{$randomValidityDays}D"));
+                    $quotation->setQuoteValidityDuration($validityDuration);
+
+                    $randomPaymentMethod = $paymentMethods[array_rand($paymentMethods)];
+                    $quotation->setPaymentMethod($randomPaymentMethod);
+
+                    $quotation->setQuoteValidityDuration(new \DateTime());
+                    $quotation->setPaymentDateLimit(new \DateTime());
+
+                    $quotation->setPaymentDays("30 jours");
+                    $randomStatusIndex = array_rand($statusOptions);
+                    $quotation->setStatus($statusOptions[$randomStatusIndex]);
+                    $quotation->setCreatedAt(new \DateTime());
+
+                    $manager->persist($quotation);
 
 
-                $credit = new Credit();
-                $credit->setCompany($company);
-                $credit->setCustomer($customer);
-                $credit->setInvoice($invoice);
-                $credit->setTitle("Crédit $i");
-                $credit->setCreditNumber("CR-" . uniqid());
-                $credit->setRefundReason("Raison de remboursement pour le crédit $i");
-                $credit->setRefundedPrice(rand(1, 1000));
-                $credit->setCreditValidityDuration(new \DateTime('+1 month'));
-                $credit->setStatus($statusOptions[$randomStatusIndex]);
-                $credit->setRefundMethod($randomPaymentMethod);
-                $credit->setCreatedAt(new \DateTime());
+                    $invoice = new Invoice();
+                    $invoice->setCompany($company);
+                    $invoice->setCustomer($customer);
+                    $invoice->setTitle("Facture $i");
+                    $invoice->setDescription("Description de la facture $i");
+                    $invoice->setBillNumber("BILL-00$i");
+                    $invoice->setTotalPrice(rand(1, 1000000));
 
-                $manager->persist($credit);
+                    $invoice->setBillValidityDuration("30 jours");
+                    
+                    $invoice->setStatus($statusOptions[$randomStatusIndex]);
+                    $invoice->setPaymentMethod($randomPaymentMethod);
+                    $paymentDateLimit = new \DateTime();
+                    $paymentDateLimit->add(new \DateInterval('P15D'));
+                    $invoice->setCreatedAt(new \DateTime());
+                    $invoice->setQuotation($quotation);
+                    $invoice->setDeliveryDate("10-10-2020");
+                    $manager->persist($invoice);
 
-                for ($j = 1; $j <= 3; $j++) {
-                    $service = new Services();
-                    $service->setTitle("Service $j commun pour " . $quotation->getTitle() . ", " . $invoice->getTitle() . " et " . $credit->getTitle());
-                    $service->setDescription("Description du service $j commun pour " . $quotation->getTitle() . ", " . $invoice->getTitle() . " et " . $credit->getTitle());
-                    $service->setQuantity(rand(1, 10));
-                    $service->setUnitCost(rand(50, 200));
-                    $service->setTotalPrice($service->getQuantity() * $service->getUnitCost());
-                    $service->setCreatedAt(new \DateTime());
-                    $service->setQuotation($quotation);
-                    $service->setInvoice($invoice);
-                    $service->setCredit($credit);
-                    $manager->persist($service);
+
+                    $credit = new Credit();
+                    $credit->setCompany($company);
+                    $credit->setCustomer($customer);
+                    $credit->setInvoice($invoice);
+                    $credit->setTitle("Crédit $i");
+                    $credit->setCreditNumber("CR-" . uniqid());
+                    $credit->setRefundReason("Raison de remboursement pour le crédit $i");
+                    $credit->setRefundedPrice(rand(1, 1000));
+                    $credit->setCreditValidityDuration(new \DateTime('+1 month'));
+                    $credit->setStatus($statusOptions[$randomStatusIndex]);
+                    $credit->setRefundMethod($randomPaymentMethod);
+                    $credit->setCreatedAt(new \DateTime());
+
+                    $manager->persist($credit);
+
+                    for ($j = 1; $j <= 3; $j++) {
+                        $service = new Services();
+                        $service->setTitle("Service $j commun pour " . $quotation->getTitle() . ", " . $invoice->getTitle() . " et " . $credit->getTitle());
+                        $service->setDescription("Description du service $j commun pour " . $quotation->getTitle() . ", " . $invoice->getTitle() . " et " . $credit->getTitle());
+                        $service->setQuantity(rand(1, 10));
+                        $service->setUnitCost(rand(50, 200));
+                        $service->setTotalPrice($service->getQuantity() * $service->getUnitCost());
+                        $service->setCreatedAt(new \DateTime());
+                        $service->setQuotation($quotation);
+                        $service->setInvoice($invoice);
+                        $service->setCredit($credit);
+                        $manager->persist($service);
                     }
                 }
             }
-        }   
-        $manager->flush();        
+        }
+        $manager->flush();
     }
 }
