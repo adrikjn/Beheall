@@ -43,8 +43,8 @@ class Invoice
         maxMessage: "L'objet ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern: "/^[a-zA-Z0-9\s\-,.!]+$/",
-        message: "L'objet ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des tirets, des points et des points d'exclamation."
+        pattern: "/^[a-zA-ZÀ-ÿ0-9\s\-,.!]+$/",
+        message: "L'objet ne peut contenir que des lettres, des chiffres, des accents, des espaces, des virgules, des tirets, des points et des points d'exclamation."
     )]
     #[Groups(['invoice:read', 'invoice:create'])]
     private ?string $title = null;
@@ -67,7 +67,7 @@ class Invoice
 
     #[ORM\Column(length: 255)]
     #[Groups(['invoice:read', 'invoice:create'])]
-    #[Assert\NotBlank(message: "La date de réalisation du service ou de la livraison est obligatoire.")]
+    #[Assert\NotBlank(message: "La date de la réalisation du service est obligatoire.")]
     #[Assert\GreaterThan(propertyPath:"fromDate", message:"La date de livraison ne peut pas être antérieure ou égale à la date de départ.")]
     private ?string $deliveryDate = null;
 

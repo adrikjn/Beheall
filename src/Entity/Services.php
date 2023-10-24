@@ -34,8 +34,8 @@ class Services
         maxMessage : "Le nom du produit/service ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern: "/^[a-zA-Z0-9\s\-,.!]+$/",
-        message: "Le nom du produit ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des tirets, des points et des points d'exclamation."
+        pattern: "/^[a-zA-ZÀ-ÿ0-9\s\-,.!]+$/",
+        message: "Le nom du produit ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des accents, des tirets, des points et des points d'exclamation."
     )]
     private ?string $title = null;
 

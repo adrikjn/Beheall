@@ -39,8 +39,8 @@ class Customer
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern: '/^[a-zA-Z -]+$/',
-        message: "Le nom ne doit contenir que des lettres, des espaces et des traits d'union."
+        pattern: '/^[a-zA-ZÀ-ÿ -]+$/',
+        message: "Le nom ne doit contenir que des lettres, des espaces, des accents et des traits d'union."
     )]
     #[Groups(['customer:read', 'customer:create', 'company:read', 'invoice:read'])]
     private ?string $lastName = null;
@@ -55,8 +55,8 @@ class Customer
         maxMessage: "Le prénom ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern: '/^[a-zA-Z -]+$/',
-        message: "Le prénom ne doit contenir que des lettres, des espaces et des traits d'union."
+        pattern: '/^[a-zA-ZÀ-ÿ -]+$/',
+        message: "Le prénom ne doit contenir que des lettres, des espaces, des accents et des traits d'union."
     )]
     private ?string $firstName = null;
 
@@ -90,8 +90,8 @@ class Customer
         maxMessage: "L'activité commerciale ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern: "/^[a-zA-Z0-9\s\-,.!]+$/",
-        message: "L'activité commerciale ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des tirets, des points et des points d'exclamation."
+        pattern: "/^[a-zA-ZÀ-ÿ0-9\s\-,.!]+$/",
+        message: "L'activité commerciale ne peut contenir que des lettres, des chiffres, des espaces, des virgules, des accents, des tirets, des points et des points d'exclamation."
     )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $activity = null;
@@ -161,7 +161,7 @@ class Customer
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Regex(
         pattern: '/^FR[0-9A-Z]{2}[0-9]{9}$/i',
-        message: 'Le numéro de TVA intracommunautaire doit être au format FR12345678901.'
+        message: 'Le numéro de TVA intracommunautaire doit être au format FR suivi de 9 chiffres (11 caractères attendus).'
     )]
     #[Groups(['customer:read', 'customer:create', 'invoice:read'])]
     private ?string $vatId = null;
@@ -190,7 +190,7 @@ class Customer
     #[Groups(['customer:read'])]
     private Collection $credits;
 
-  
+
 
     public function __construct()
     {

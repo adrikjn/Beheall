@@ -77,7 +77,7 @@ class Company
     )]
     #[Assert\Regex(
         pattern: "/^\+?[0-9]+$/",
-        message: "Le numéro de téléphone doit contenir seulement des chiffres ou/et un signe '+'."
+        message: "Le numéro de téléphone ne peut contenir seulement des chiffres ou/et un signe '+'."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $phoneNumber = null;
@@ -136,10 +136,10 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(
         max: 40,
-        maxMessage: "La ville d'enregistrement ne peut pas dépasser {{ limit }} caractères."
+        maxMessage: "La ville d'enregistrement ne peut dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern: "/^[a-zA-Z\s-]+$/",
+        pattern: "/^[a-zA-ZÀ-ÿ\s-]+$/u",
         message: "La ville d'enregistrement ne peut contenir que des lettres, des espaces et des traits d'union."
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
@@ -148,7 +148,7 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Regex(
         pattern: '/^FR[0-9A-Z]{2}[0-9]{9}$/i',
-        message: 'Le numéro de TVA intracommunautaire doit être au format FR12345678901.'
+         message: 'Le numéro de TVA intracommunautaire doit être au format FR suivi de 9 chiffres (11 caractères attendus).'
     )]
     #[Groups(['company:read', 'company:create', 'invoice:read'])]
     private ?string $vatId = null;

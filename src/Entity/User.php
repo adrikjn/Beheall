@@ -72,15 +72,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[Assert\Length(
+        min: 12,
+        minMessage: "Le mot de passe doit contenir au moins {{ limit }} caractères.",
         max: 16,
         maxMessage: "Le mot de passe ne doit pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern: "/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&,.])([A-Za-z\d@$!%*#?&,.]{8,})$/",
-        message: "Le mot de passe doit contenir au moins 8 caractères avec au moins 1 chiffre et 1 caractère spécial."
+        pattern: "/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&,.])([A-Za-z\d@$!%*#?&,.]{12,})$/",
+        message: "Le mot de passe doit contenir au moins 12 caractères avec au moins 1 chiffre et 1 caractère spécial."
     )]
     #[Groups(['user:create'])]
     private ?string $plainPassword = null;
+    
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le nom ne peut pas être vide.")]
@@ -91,8 +94,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern: '/^[a-zA-Z -]+$/',
-        message: "Le nom ne doit contenir que des lettres, des espaces et des traits d'union."
+        pattern: '/^[a-zA-ZÀ-ÿ -]+$/',
+        message: "Le nom ne doit contenir que des lettres, des accents, des espaces et des traits d'union."
     )]
     #[Groups(['user:read', 'user:create'])]
     private ?string $lastName = null;
@@ -107,8 +110,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: "Le prénom ne peut pas dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
-        pattern: '/^[a-zA-Z -]+$/',
-        message: "Le prénom ne doit contenir que des lettres, des espaces et des traits d'union."
+        pattern: '/^[a-zA-ZÀ-ÿ -]+$/',
+        message: "Le prénom ne doit contenir que des lettres, des accents, des espaces et des traits d'union."
     )]
     private ?string $firstName = null;
 
