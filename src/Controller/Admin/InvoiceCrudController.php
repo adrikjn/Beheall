@@ -34,7 +34,7 @@ class InvoiceCrudController extends AbstractCrudController
                     }
                     return implode(', ', $serviceIds);
                 }),
-                TextField::new('bllNumber', 'Numéro de facture')->onlyOnIndex(),
+                TextField::new('billNumber', 'Numéro de facture')->onlyOnIndex(),
                 TextField::new('fromDate', 'Début')->onlyOnIndex()->formatValue(function ($value, $entity) {
                     return $value ?? ''; // Si $value est null, renvoie une chaîne vide
                 }),
