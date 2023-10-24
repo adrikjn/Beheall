@@ -24,27 +24,27 @@ class CompanyCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
-            AssociationField::new('user')->setLabel('ID utilisateur')->onlyOnIndex(),
+            AssociationField::new('user')->setLabel('ID Utilisateur')->onlyOnIndex(),
             AssociationField::new('customers')
-            ->setLabel('IDs Clients')
-            ->onlyOnIndex()
-            ->formatValue(function ($value, $entity) {
-                $customerIds = [];
-                foreach ($entity->getCustomers() as $customer) {
-                    $customerIds[] = $customer->getId();
-                }
-                return implode(', ', $customerIds);
-            }),
-        AssociationField::new('invoices')
-            ->setLabel('IDs Factures')
-            ->onlyOnIndex()
-            ->formatValue(function ($value, $entity) {
-                $invoiceIds = [];
-                foreach ($entity->getInvoices() as $invoice) {
-                    $invoiceIds[] = $invoice->getId();
-                }
-                return implode(', ', $invoiceIds);
-            }),
+                ->setLabel('IDs Clients')
+                ->onlyOnIndex()
+                ->formatValue(function ($value, $entity) {
+                    $customerIds = [];
+                    foreach ($entity->getCustomers() as $customer) {
+                        $customerIds[] = $customer->getId();
+                    }
+                    return implode(', ', $customerIds);
+                }),
+            AssociationField::new('invoices')
+                ->setLabel('IDs Factures')
+                ->onlyOnIndex()
+                ->formatValue(function ($value, $entity) {
+                    $invoiceIds = [];
+                    foreach ($entity->getInvoices() as $invoice) {
+                        $invoiceIds[] = $invoice->getId();
+                    }
+                    return implode(', ', $invoiceIds);
+                }),
             TextField::new('name', 'Nom d\'entreprise')->onlyOnIndex(),
             EmailField::new('email', 'Email')->onlyOnIndex(),
             TextField::new('phoneNumber', 'Numéro de téléphone')->onlyOnIndex(),
@@ -52,14 +52,16 @@ class CompanyCrudController extends AbstractCrudController
             TextField::new('city', 'Ville')->onlyOnIndex(),
             TextField::new('postalCode', 'Code postal')->onlyOnIndex(),
             TextField::new('sirenSiret', 'SIREN/SIRET/RCS/RM')->onlyOnIndex(),
-            TextField::new('vatId', 'TVA Intracommunautaire')->onlyOnIndex(),
+            TextField::new('vatId', 'TVA Intracommunautaire')->onlyOnIndex()->formatValue(function ($value, $entity) {
+                return $value ?? ''; // Si $value est null, renvoie une chaîne vide
+            }),
             TextField::new('website', 'Site web')
-    ->onlyOnIndex()
-    ->formatValue(function ($value, $entity) {
-        return $value ?? ''; // Si $value est null, renvoie une chaîne vide
-    }),
-            DateTimeField::new('createdAt', "Créer le")->setFormat('d/M/Y à H:m:s')->onlyOnIndex(),
-            
+                ->onlyOnIndex()
+                ->formatValue(function ($value, $entity) {
+                    return $value ?? ''; // Si $value est null, renvoie une chaîne vide
+                }),
+            DateTimeField::new('createdAt', "Date de création")->setFormat('d/M/Y à H:m:s')->onlyOnIndex(),
+
         ];
     }
     public function configureActions(Actions $actions): Actions

@@ -31,7 +31,7 @@ class ServicesCrudController extends AbstractCrudController
             NumberField::new('unitCost', 'PU/PJ')->onlyOnIndex(),
             NumberField::new('totalPrice', 'Prix HT')->onlyOnIndex(),
             NumberField::new('vat', 'TVA')->onlyOnIndex(),
-            DateTimeField::new('createdAt', "Créer le")->setFormat('d/M/Y à H:m:s')->onlyOnIndex(),
+            DateTimeField::new('Date de création', "Créer le")->setFormat('d/M/Y à H:m:s')->onlyOnIndex(),
 
         ];
     }

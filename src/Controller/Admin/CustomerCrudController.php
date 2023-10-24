@@ -23,7 +23,7 @@ class CustomerCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
-            AssociationField::new('company')->setLabel('ID entreprise')->onlyOnIndex(),
+            AssociationField::new('company')->setLabel('ID Entreprise')->onlyOnIndex(),
             AssociationField::new('invoices', 'Factures')
                 ->setLabel('IDs Factures')
                 ->onlyOnIndex()
@@ -41,9 +41,13 @@ class CustomerCrudController extends AbstractCrudController
             TextField::new('address', 'Adresse')->onlyOnIndex(),
             TextField::new('city', 'Ville')->onlyOnIndex(),
             TextField::new('postalCode', 'Code postal')->onlyOnIndex(),
-            TextField::new('sirenSiret', 'SIREN/SIRET/RCS/RM')->onlyOnIndex(),
-            TextField::new('website', 'Site web'),
-            DateTimeField::new('createdAt', "Créer le")->setFormat('d/M/Y à H:m:s')->hideOnForm(),
+            TextField::new('sirenSiret', 'SIREN/SIRET/RCS/RM')->onlyOnIndex()->formatValue(function ($value, $entity) {
+                return $value ?? ''; // Si $value est null, renvoie une chaîne vide
+            }),
+            TextField::new('website', 'Site web')->formatValue(function ($value, $entity) {
+                return $value ?? ''; // Si $value est null, renvoie une chaîne vide
+            }),
+            DateTimeField::new('createdAt', "Date de création")->setFormat('d/M/Y à H:m:s')->hideOnForm(),
         ];
     }
 

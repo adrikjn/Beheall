@@ -23,9 +23,9 @@ class InvoiceCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
-            AssociationField::new('company')->setLabel('ID company')->onlyOnIndex(),
-            AssociationField::new('customer')->setLabel('ID customer')->onlyOnIndex(),
-            AssociationField::new('services', 'Services')
+            AssociationField::new('company')->setLabel('ID Entreprise')->onlyOnIndex(),
+            AssociationField::new('customer')->setLabel('ID Client')->onlyOnIndex(),
+            AssociationField::new('services', 'ID Produits/Services')
                 ->onlyOnIndex()
                 ->formatValue(function ($value, $entity) {
                     $serviceIds = [];
@@ -35,13 +35,15 @@ class InvoiceCrudController extends AbstractCrudController
                     return implode(', ', $serviceIds);
                 }),
                 TextField::new('bllNumber', 'Numéro de facture')->onlyOnIndex(),
-                TextField::new('fromDate', 'Début')->onlyOnIndex(),
+                TextField::new('fromDate', 'Début')->onlyOnIndex()->formatValue(function ($value, $entity) {
+                    return $value ?? ''; // Si $value est null, renvoie une chaîne vide
+                }),
                 TextField::new('deliveryDate', 'Fin/Le')->onlyOnIndex(),
                 NumberField::new('totalPrice', 'Prix TTC')->onlyOnIndex(),
                 TextField::new('status', 'Etat')->onlyOnIndex(),
                 TextField::new('paymentMethod', 'Méthode de paiement')->onlyOnIndex(),
-                TextField::new('billValidityDuration', 'Durée de paiment limite')->onlyOnIndex(),
-                DateTimeField::new('createdAt', "Créer le")->setFormat('d/M/Y à H:m:s')->onlyOnIndex(),
+                TextField::new('billValidityDuration', 'Validité de la facture')->onlyOnIndex(),
+                DateTimeField::new('createdAt', "Date de création")->setFormat('d/M/Y à H:m:s')->onlyOnIndex(),
         ];
     }
     public function configureActions(Actions $actions): Actions

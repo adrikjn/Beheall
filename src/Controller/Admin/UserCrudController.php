@@ -42,8 +42,8 @@ class UserCrudController extends AbstractCrudController
             TextField::new('firstName', 'Prénom')->onlyWhenCreating(),
             TextField::new('phoneNumber', 'Numéro de téléphone')->onlyOnIndex(),
             TextField::new('phoneNumber', 'Numéro de téléphone')->onlyWhenCreating(),
-            DateTimeField::new('createdAt', "Créer le")->setFormat('d/M/Y à H:m:s')->hideOnForm(),
-            CollectionField::new('roles')->setTemplatePath('admin/field/roles.html.twig'),
+            DateTimeField::new('createdAt', "Date de création")->setFormat('d/M/Y à H:m:s')->hideOnForm(),
+            CollectionField::new('roles', 'Rôles')->setTemplatePath('admin/field/roles.html.twig'),
             AssociationField::new('companies', 'Entreprises')
                 ->onlyOnIndex()
                 ->formatValue(function ($value, $entity) {
