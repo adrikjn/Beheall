@@ -21,9 +21,8 @@ class RefreshTokenCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
-            TextField::new('refresh_token', 'Tokens de rafraîchissement')->onlyOnIndex(),
             TextField::new('username', 'Email')->onlyOnIndex(),
-            DateTimeField::new('valid', "Connexions")->setFormat('d/M/Y à H:m:s')->hideOnForm(),
+            DateTimeField::new('valid', "Date")->setFormat('d/M/Y à H:m:s')->hideOnForm(),
         ];
     }
 
