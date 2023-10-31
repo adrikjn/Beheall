@@ -4,8 +4,8 @@
 {% endblock %}
 
 {% block body %}
-	<div style="height: 100vh;" class="bg-dark">
-		<div class=" d-flex align-items-center justify-content-between px-5 g-3" style="height: 90vh;">
+	<div class="bg-dark vh-100 d-flex align-items-center">
+		<div class=" d-flex align-items-center justify-content-between px-5 g-3 ">
 			<h1 class="text-center text-light ">Bonjour
 				{% if app.user %}
 					{{ app.user.email }}
