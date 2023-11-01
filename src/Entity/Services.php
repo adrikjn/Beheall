@@ -26,12 +26,12 @@ class Services
 
     #[ORM\Column(length: 255)]
     #[Groups(['invoice:read', 'service:read', 'service:create'])]
-    #[Assert\NotBlank(message: "Le nom du produit/service ne peut pas être vide.")]
+    #[Assert\NotBlank(message: "Le nom du produit/service ne peut être vide.")]
     #[Assert\Length(
         min : 1,
         max : 30,
         minMessage : "Le nom du produit/service doit comporter au moins {{ limit }} caractère.",
-        maxMessage : "Le nom du produit/service ne peut pas dépasser {{ limit }} caractères."
+        maxMessage : "Le nom du produit/service ne peut dépasser {{ limit }} caractères."
     )]
     #[Assert\Regex(
         pattern: "/^[a-zA-ZÀ-ÿ0-9\s\-,.!]+$/",
@@ -49,19 +49,19 @@ class Services
 
     #[ORM\Column]
     #[Groups(['invoice:read', 'service:read', 'service:create'])]
-    #[Assert\NotBlank(message:"La quantité/durée journalier ne peut pas être vide.")]
+    #[Assert\NotBlank(message:"La quantité/durée journalier ne peut être vide.")]
     #[Assert\GreaterThanOrEqual(value: 0, message:"La quantité/durée journalier ne peut pas être négative.")]
     private ?int $quantity = null;
 
     #[ORM\Column]
     #[Groups(['invoice:read', 'service:read', 'service:create'])]
-    #[Assert\NotBlank(message:"Le coût unitaire/journalier ne peut pas être vide.")]
+    #[Assert\NotBlank(message:"Le coût unitaire/journalier ne peut être vide.")]
     #[Assert\GreaterThanOrEqual(value: 0, message:"Le coût unitaire/journalier ne peut pas être négatif.")]
     private ?float $unitCost = null;
 
     #[ORM\Column]
     #[Groups(['invoice:read', 'service:read', 'service:create'])]
-    #[Assert\NotBlank(message:"Le prix total HT ne peut pas être vide.")]
+    #[Assert\NotBlank(message:"Le prix total HT ne peut être vide.")]
     private ?float $totalPrice = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -83,7 +83,7 @@ class Services
 
     #[ORM\Column(nullable: true)]
     #[Groups(['invoice:read', 'service:read', 'service:create'])]
-    #[Assert\NotBlank(message:"La TVA ne peut pas être vide. Veuillez mettre 0 si le produit ou service est exemptée.")]
+    #[Assert\NotBlank(message:"La TVA ne peut être vide. Veuillez mettre 0 si le produit ou service est exempté de la TVA")]
     #[Assert\GreaterThanOrEqual(value: 0, message:"La TVA ne peut pas être négative.")]
     private ?float $vat = null;
 
