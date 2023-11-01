@@ -62,7 +62,6 @@ class Services
     #[ORM\Column]
     #[Groups(['invoice:read', 'service:read', 'service:create'])]
     #[Assert\NotBlank(message:"Le prix total HT ne peut pas être vide.")]
-    
     private ?float $totalPrice = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -84,6 +83,7 @@ class Services
 
     #[ORM\Column(nullable: true)]
     #[Groups(['invoice:read', 'service:read', 'service:create'])]
+    #[Assert\NotBlank(message:"La TVA ne peut pas être vide. Veuillez mettre 0 si le produit ou service est exemptée.")]
     #[Assert\GreaterThanOrEqual(value: 0, message:"La TVA ne peut pas être négative.")]
     private ?float $vat = null;
 
