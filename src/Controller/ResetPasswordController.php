@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 
@@ -23,13 +24,32 @@ class ResetPasswordController extends AbstractController
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/reset-password/confirm/{token}", name="reset_password_confirm")
+     /**
+     * @Route("/reset-password/confirm/{token}", name="reset_password_confirm", methods={"GET", "POST"})
      */
-    public function confirmResetPassword(string $token): Response
+    public function confirmResetPassword(Request $request, string $token, UserPasswordHasherInterface $passwordHasher): Response
     {
-        // Vérifiez le jeton et effectuez la réinitialisation du mot de passe ici.
-        // Vous pouvez également afficher un formulaire de réinitialisation de mot de passe.
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['resetPasswordToken' => $token]);
+
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur non trouvé');
+        }
+
+        if ($request->isMethod('POST')) {
+            $newPassword = $request->request->get('password');
+            $confirmPassword = $request->request->get('confirm_password');
+
+            if ($newPassword === $confirmPassword) {
+                $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
+                $user->setPassword($hashedPassword);
+                $user->setResetPasswordToken(null);
+
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
+
+                return $this->redirectToRoute('www.beheall.com');
+            }
+        }
 
         return $this->render('reset_password/confirm.html.twig', [
             'token' => $token,
