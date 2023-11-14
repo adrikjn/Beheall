@@ -60,20 +60,32 @@ class ResetPasswordController extends AbstractController
     /**
      * @Route("/reset-password", name="reset_password", methods={"POST"})
      */
-    public function resetPassword(Request $request, MailerInterface $mailer): Response
+    public function resetPassword(Request $request, MailerInterface $mailer, UserRepository $userRepository, TokenGeneratorInterface $tokenGenerator, UserPasswordHasherInterface $passwordHasher): Response
     {
         $data = json_decode($request->getContent(), true);
         $email = $data['email'];
-
-        // Générez un jeton unique (par exemple, une chaîne aléatoire)
-        $token = bin2hex(random_bytes(32));
-
+    
+        // Recherchez l'utilisateur par son email
+        $user = $userRepository->findOneBy(['email' => $email]);
+    
+        if (!$user) {
+            return new JsonResponse(['message' => 'Utilisateur non trouvé.'], Response::HTTP_NOT_FOUND);
+        }
+    
+        // Générez un jeton unique pour réinitialiser le mot de passe
+        $token = $tokenGenerator->generateToken();
+    
+        // Stockez le token dans l'entité User
+        $user->setResetPasswordToken($token);
+    
+        // Enregistrez les modifications dans la base de données en utilisant l'EntityManager
+        $this->entityManager->flush();
+    
         // Envoyez un e-mail à l'utilisateur avec le lien de réinitialisation
         $resetUrl = $this->generateUrl('reset_password_confirm', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-
-        // Utilisez SendinBlue pour envoyer l'e-mail
+    
         $email = (new Email())
-            ->from('beheallpro@outlook.com') // Mettez votre adresse e-mail d'expéditeur
+            ->from('beheallpro@outlook.com')
             ->to($email)
             ->subject('Réinitialisation de mot de passe')
             ->html(
@@ -82,32 +94,9 @@ class ResetPasswordController extends AbstractController
                     ['resetUrl' => $resetUrl]
                 )
             );
-
+    
         $mailer->send($email);
-
+    
         return new Response('E-mail de réinitialisation envoyé avec succès !');
-    }
-    public function generateResetToken(Request $request, UserRepository $userRepository, TokenGeneratorInterface $tokenGenerator): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $email = $data['email'];
-
-        // Recherchez l'utilisateur par son email
-        $user = $userRepository->findOneBy(['email' => $email]);
-
-        if (!$user) {
-            return new JsonResponse(['message' => 'Utilisateur non trouvé.'], Response::HTTP_NOT_FOUND);
-        }
-
-        // Générez un jeton unique pour réinitialiser le mot de passe
-        $token = $tokenGenerator->generateToken();
-
-        // Stockez le token dans l'entité User
-        $user->setResetPasswordToken($token);
-
-        // Enregistrez les modifications dans la base de données en utilisant l'EntityManager
-        $this->entityManager->flush();
-
-        return new JsonResponse(['message' => 'Token de réinitialisation généré avec succès.']);
     }
 }
