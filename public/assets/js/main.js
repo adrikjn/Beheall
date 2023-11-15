@@ -20,5 +20,7 @@ function validateForm() {
         return false;
     }
 
-    return true;
+    // La validation a réussi, effectuez la redirection
+    window.location.href = "https://www.beheall.com/login";
+    return false; 
 }
