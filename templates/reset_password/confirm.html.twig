@@ -9,14 +9,16 @@
 
     {% if token %}
         <p>Veuillez utiliser le formulaire ci-dessous pour réinitialiser votre mot de passe :</p>
-        <form method="post" action="{{ path('reset_password_confirm', {'token': token}) }}">
+        <form method="post" action="{{ path('reset_password_confirm', {'token': token}) }}" onsubmit="return validateForm()">
             <div>
                 <label for="password">Nouveau mot de passe :</label>
                 <input type="password" id="password" name="password" required>
+                <div id="password-error" class="error-message"></div>
             </div>
             <div>
                 <label for="confirm_password">Confirmez le nouveau mot de passe :</label>
                 <input type="password" id="confirm_password" name="confirm_password" required>
+                <div id="confirm-password-error" class="error-message"></div>
             </div>
             <button type="submit">Réinitialiser le mot de passe</button>
         </form>
