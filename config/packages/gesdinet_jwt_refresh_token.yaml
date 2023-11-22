@@ -1,6 +1,6 @@
 gesdinet_jwt_refresh_token:
     refresh_token_class: App\Entity\RefreshToken
-    ttl: 86400
+    ttl: 864000
     ttl_update: true
     user_identity_field: id
     user_provider: security.user.provider.concrete.app_user_provider

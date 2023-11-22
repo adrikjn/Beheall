@@ -4,18 +4,22 @@ controllers:
         namespace: App\Controller
     type: attribute
 
+# Route pour le processus de connexion via API (seulement POST)
 api_login_check: 
     path: /api/login_check
     methods: ['POST']
 
+# Route pour le rafraîchissement du token d'accès
 api_refresh_token:
     path: /api/token/refresh
 
+# Route pour la réinitialisation du mot de passe (Méthode associée & POST Only)
 reset_password:
     path: '/reset-password'
     controller: App\Controller\ResetPasswordController::resetPassword
     methods: ['POST']
 
+# Route pour la confirmation de réinitialisation du mot de passe (Méthode associée)
 reset_password_confirm:
     path: '/reset-password/confirm/{token}'
     controller: App\Controller\ResetPasswordController::confirmResetPassword
