@@ -3,14 +3,18 @@
 {% block title %}Confirmation de réinitialisation du mot de passe
 {% endblock %}
 
+{# Div principal avec une classe spécifiant le fond sombre, la hauteur de la vue à 100%, et le centrage vertical #}
 {% block body %}
 	<div class="container-fluid d-flex justify-content-center align-items-center vh-100 bg-dark">
 		<div class="row  my-5 border border-3 border-dark rounded p-5 bg-light">
 			<div>
 				<h1 class="text-center">Confirmation de réinitialisation du mot de passe</h1>
 
+				{# Condition : Si le jeton existe #}
 				{% if token %}
 					<p class="text-center">Veuillez utiliser le formulaire ci-dessous pour réinitialiser votre mot de passe :</p>
+
+					{# Formulaire de réinitialisation du mot de passe avec des champs pour le nouveau mot de passe et la confirmation #}
 					<form class="needs-validation" method="post" action="{{ path('reset_password_confirm', {'token': token}) }}" onsubmit="return validateForm()">
 						<div class="mb-3">
 							<label for="password" class="form-label">Nouveau mot de passe :</label>
@@ -23,11 +27,14 @@
 							<small id="confirm-password-error" class="error-message text-danger h6"></small>
 						</div>
 						<div class="d-flex justify-content-center mt-3">
-							<button type="submit" onclick="redirectAfterSubmit()" class="btn btn-dark" >Réinitialiser le mot de passe</button>
+							<button type="submit" onclick="redirectAfterSubmit()" class="btn btn-dark">Réinitialiser le mot de passe</button>
 						</div>
 					</form>
-                     <div id="success-message" class="text-success h6 mt-3 d-none">Votre mot de passe a bien été modifié. Vous pouvez maintenant vous connecter sur Beheall.</div>
+
+					{# Message de succès caché par défaut et affiché après la soumission réussie du formulaire #}
+					<div id="success-message" class="text-success h6 mt-3 d-none">Votre mot de passe a bien été modifié. Vous pouvez maintenant vous connecter sur Beheall.</div>
 				{% else %}
+					{# Message indiquant que le lien de réinitialisation du mot de passe est invalide ou a expiré #}
 					<p class="text-center">Le lien de réinitialisation du mot de passe est invalide ou a expiré.</p>
 				{% endif %}
 			</div>

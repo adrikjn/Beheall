@@ -4,27 +4,27 @@
 {% endblock %}
 
 {% block body %}
+	{# Div principal avec une classe spécifiant le fond sombre, la hauteur de la vue à 100%, et le centrage vertical #}
 	<div class="bg-dark vh-100 d-flex align-items-center justify-content-between px-5 mx-auto">
-		<div class="d-flex flex-column gap-3">
+		<div
+			class="d-flex flex-column gap-3">
+			{# Affiche l'e-mail de l'utilisateur si connecté #}
 			<h1 class="text-center text-light">Bonjour
 				{% if app.user %}
 					{{ app.user.email }}
 				{% endif %}
 			</h1>
-			<div class="d-flex gap-3">
+			<div
+				class="d-flex gap-3">
+				{# Vérifie si l'utilisateur a le rôle "ROLE_ADMIN" et affiche un bouton de gestion admin le cas échéant #}
 				{% if is_granted("ROLE_ADMIN") %}
 					<a href="{{ path('admin') }}" class="btn btn-lg btn-light text-center">Gestion Admin</a>
-				{% endif %}{% if app.user %}
+				{% endif %}
+				{# Vérifie si l'utilisateur est connecté et affiche un bouton de déconnexion le cas échéant #}
+				{% if app.user %}
 					<a href="{{ path('app_logout') }}" class="btn btn-lg btn-success">Déconnexion</a>
 				{% endif %}
-		
-				
 			</div>
-
 		</div>
-
-
 	</div>
-
-
 {% endblock %}

@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
+// Mise en place d'API Platform avec la Serialization
 #[ApiResource(
     normalizationContext: ['groups' => ['company:read']],
     denormalizationContext: ['groups' => ['company:create']]

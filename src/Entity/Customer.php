@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
+// Mise en place d'API Platform avec la Serialization
 #[ApiResource(
     normalizationContext: ['groups' => ['customer:read']],
     denormalizationContext: ['groups' => ['customer:create']]

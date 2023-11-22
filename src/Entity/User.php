@@ -25,6 +25,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
+// Mise en place d'API Platform avec la Serialization
 #[ApiResource(
     operations: [
         new GetCollection(),

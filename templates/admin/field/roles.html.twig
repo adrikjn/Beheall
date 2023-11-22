@@ -1,5 +1,6 @@
 {% block _User_roles %}
 
+{# Boucle à travers les rôles de l'utilisateur #}
 {% for role in field.value %}
     {% if role == "ROLE_USER" %}
         Membre
