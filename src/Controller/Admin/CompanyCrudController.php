@@ -12,23 +12,28 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
+// Contrôleur CRUD pour l'entité Company.
 class CompanyCrudController extends AbstractCrudController
 {
+    //  Récupère le nom qualifié de la classe de l'entité gérée par ce contrôleur.
     public static function getEntityFqcn(): string
     {
         return Company::class;
     }
 
 
+    // Configure les champs à afficher dans la vue de liste (index).
     public function configureFields(string $pageName): iterable
     {
         return [
+            // Configuration des champs à afficher dans la vue de liste
             IdField::new('id')->onlyOnIndex(),
             AssociationField::new('user')->setLabel('ID Utilisateur')->onlyOnIndex(),
             AssociationField::new('customers')
                 ->setLabel('IDs Clients')
                 ->onlyOnIndex()
                 ->formatValue(function ($value, $entity) {
+                    // Formatage personnalisé des valeurs des clients pour l'affichage
                     $customerIds = [];
                     foreach ($entity->getCustomers() as $customer) {
                         $customerIds[] = $customer->getId();
@@ -64,8 +69,10 @@ class CompanyCrudController extends AbstractCrudController
 
         ];
     }
+    // Configurer les actions disponibles pour l'entité.
     public function configureActions(Actions $actions): Actions
     {
+        // Désactivation des actions NEW et EDIT
         $actions->disable(Action::NEW);
         $actions->disable(Action::EDIT);
         return $actions;

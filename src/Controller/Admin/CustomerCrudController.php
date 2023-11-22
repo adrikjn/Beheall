@@ -12,13 +12,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
+// Contrôleur CRUD pour l'entité Customer.
 class CustomerCrudController extends AbstractCrudController
 {
+    // Récupère le nom qualifié de la classe de l'entité gérée par ce contrôleur.
     public static function getEntityFqcn(): string
     {
         return Customer::class;
     }
 
+    // Configure les champs à afficher dans la vue de liste (index).
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -28,6 +31,7 @@ class CustomerCrudController extends AbstractCrudController
                 ->setLabel('IDs Factures')
                 ->onlyOnIndex()
                 ->formatValue(function ($value, $entity) {
+                    // Formatage personnalisé des valeurs des factures pour l'affichage
                     $invoiceIds = [];
                     foreach ($entity->getInvoices() as $invoice) {
                         $invoiceIds[] = $invoice->getId();
@@ -51,8 +55,10 @@ class CustomerCrudController extends AbstractCrudController
         ];
     }
 
+    // Configurer les actions disponibles pour l'entité.
     public function configureActions(Actions $actions): Actions
     {
+        // Désactivation des actions NEW et EDIT
         $actions->disable(Action::NEW);
         $actions->disable(Action::EDIT);
         return $actions;

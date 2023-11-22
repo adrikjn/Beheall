@@ -16,14 +16,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 
-
+// Contrôleur du tableau de bord de l'administration EasyAdmin.
 class DashboardController extends AbstractDashboardController
 {
+    // Constructeur du contrôleur du tableau de bord de l'administration.
     public function __construct(private AdminUrlGenerator $adminUrlGenerator)
     {
     }
 
     #[Route('/admin-dashboard', name: 'admin')]
+    // Affiche le tableau de bord de l'administration.
     public function index(): Response
     {
         // return parent::index();
@@ -37,14 +39,15 @@ class DashboardController extends AbstractDashboardController
 
         return $this->redirect($url);
     }
-    
 
+    // Configure le tableau de bord de l'administration.
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
             ->setTitle('Beheall Admin');
     }
 
+    // Configure les éléments du menu de l'administration
     public function configureMenuItems(): iterable
     {
         return [

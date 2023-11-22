@@ -13,13 +13,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
+// Contrôleur CRUD pour l'entité Services dans l'interface d'administration EasyAdmin.
 class ServicesCrudController extends AbstractCrudController
 {
+    // Retourne le FQCN (Fully Qualified Class Name) de l'entité gérée par ce contrôleur.
     public static function getEntityFqcn(): string
     {
         return Services::class;
     }
 
+    // Configure les champs à afficher dans la vue de liste (index)
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -35,6 +38,7 @@ class ServicesCrudController extends AbstractCrudController
 
         ];
     }
+    // Configure les actions disponibles pour l'entité dans l'interface d'administration.
     public function configureActions(Actions $actions): Actions
     {
         $actions->disable(Action::NEW);

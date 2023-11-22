@@ -14,19 +14,23 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+// Contrôleur CRUD pour l'entité User dans l'interface d'administration EasyAdmin.
 class UserCrudController extends AbstractCrudController
 {
+    // Constructeur du contrôleur.
+    // Le service de hachage de mot de passe.
     public function __construct(public UserPasswordHasherInterface $hasher)
     {
     }
 
-
+    // Retourne le FQCN (Fully Qualified Class Name) de l'entité gérée par ce contrôleur.
     public static function getEntityFqcn(): string
     {
         return User::class;
     }
 
 
+    // Configure les champs de l'entité pour chaque page de l'interface d'administration.
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -63,6 +67,7 @@ class UserCrudController extends AbstractCrudController
         ];
     }
 
+    // Persiste une entité dans la base de données.
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if (!$entityInstance->getId()) {
