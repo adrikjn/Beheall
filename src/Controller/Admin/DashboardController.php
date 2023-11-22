@@ -26,6 +26,7 @@ class DashboardController extends AbstractDashboardController
 
     #[Route('/admin-dashboard', name: 'admin')]
     // Affiche le tableau de bord de l'administration.
+    // Type de champ / Apparition / Nom du champ / Label..
     public function index(): Response
     {
         // return parent::index();

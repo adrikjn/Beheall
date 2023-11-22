@@ -20,6 +20,7 @@ class RefreshTokenCrudController extends AbstractCrudController
     }
 
     // Configure les champs à afficher dans la vue de liste (index)
+    // Type de champ / Apparition / Nom du champ / Label..
     public function configureFields(string $pageName): iterable
     {
         return [

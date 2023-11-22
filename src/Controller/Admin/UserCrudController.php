@@ -31,6 +31,7 @@ class UserCrudController extends AbstractCrudController
 
 
     // Configure les champs de l'entité pour chaque page de l'interface d'administration.
+    // Type de champ / Apparition / Nom du champ / Label..
     public function configureFields(string $pageName): iterable
     {
         return [

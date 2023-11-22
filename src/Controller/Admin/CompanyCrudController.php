@@ -27,6 +27,7 @@ class CompanyCrudController extends AbstractCrudController
     {
         return [
             // Configuration des champs à afficher dans la vue de liste
+            // Type de champ / Apparition / Nom du champ / Label..
             IdField::new('id')->onlyOnIndex(),
             AssociationField::new('user')->setLabel('ID Utilisateur')->onlyOnIndex(),
             AssociationField::new('customers')
